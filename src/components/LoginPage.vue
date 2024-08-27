@@ -1,26 +1,25 @@
 <template>
   <div class="login-page">
-    <div class="logo">
-      <h1>SilverWell</h1>
+    <div class="left-section">
+      <div class="logo">
+        <h1>SilverWell</h1>
+      </div>
     </div>
-    <nav class="navigation">
-      <a href="#">About Us</a>
-      <a href="#">Health Resources</a>
-      <a href="#">Community Support</a>
-      <a href="#">Contact Us</a>
-    </nav>
-    <div class="login-form">
-      <input type="email" placeholder="Email" />
-      <input type="text" placeholder="First Name" />
-      <button>Login</button>
-      <button>Sign up</button>
+    <div class="right-section">
+      <nav class="navigation">
+        <a href="#">About Us</a>
+        <a href="#">Health Resources</a>
+        <a href="#">Community Support</a>
+        <a href="#">Contact Us</a>
+      </nav>
+      <div class="login-form">
+        <input type="email" placeholder="Email" />
+        <input type="text" placeholder="First Name" />
+        <button>Login</button>
+        <button>Sign up</button>
+      </div>
+      <a href="#" class="admin-login">Login as admin</a>
     </div>
-    <!-- <div class="social-login">
-      <button><img src="path/to/google-icon.png" alt="Google" /></button>
-      <button><img src="path/to/apple-icon.png" alt="Apple" /></button>
-      <button><img src="path/to/facebook-icon.png" alt="Facebook" /></button>
-    </div> -->
-    <a href="#" class="admin-login">Login as admin</a>
   </div>
 </template>
 
@@ -29,18 +28,31 @@
   background-color: #ddaa99;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* Centers content vertically */
+  justify-content: space-between; /* Centers content horizontally */
   padding: 20px;
   box-sizing: border-box;
-  /* 添加最大宽度 */
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
 }
 
-.logo {
-  margin-bottom: 20px;
+.left-section {
+  flex: 1;
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+}
+
+.right-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center; /* Center vertically */
+}
+
+.logo h1 {
+  font-size: 3em; /* Adjust the size as needed */
+  color: #333;
 }
 
 .navigation {
