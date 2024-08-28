@@ -9,19 +9,19 @@
 
     <div class="row align-items-center justify-content-between">
       <!-- 左侧部分：Logo和登录表单 -->
-      <div class="col-md-5 text-left">
+      <div class="col-12 col-md-5 text-left">
         <h1 class="display-4 mb-4">SilverWell</h1>
         <form>
           <div class="form-group">
             <input type="email" class="form-control mb-3" placeholder="Email" />
           </div>
-          <div class="form-group">
+          <div class="form-group position-relative">
             <input type="password" class="form-control mb-2" placeholder="Password" />
-            <small class="form-text">Forgot password?</small>
+            <small class="form-text forgot-password">Forgot password?</small>
           </div>
           <button type="submit" class="btn btn-dark btn-block mb-3">Log in</button>
         </form>
-        <div class="social-login text-left">
+        <div class="social-login d-flex justify-content-between">
           <button class="btn btn-outline-secondary google-login">
             <img src="/icons/google-icon.png" alt="Google" class="mr-2" /> Google
           </button>
@@ -31,17 +31,17 @@
         </div>
       </div>
 
-      <!-- 中间的竖线和文本 -->
-      <div class="col-md-1 text-center">
+      <!-- 中间的竖线 -->
+      <div class="col-12 col-md-1 text-center my-3 my-md-0">
         <div class="vertical-line"></div>
         <div class="not-member-text">Not a member?</div>
         <div class="vertical-line"></div>
       </div>
 
       <!-- 右侧部分：注册提示 -->
-      <div class="col-md-5 text-center">
-        <div class="create-account-box p-4">
-          <button class="btn btn-light btn-block">Create an account</button>
+      <div class="col-12 col-md-5 text-center">
+        <div class="create-account-box">
+          <button class="btn btn-light btn-block create-account-button">Create an account</button>
         </div>
       </div>
     </div>
@@ -98,11 +98,13 @@ h1.display-4 {
   padding: 10px;
 }
 
-.form-text {
-  font-size: 0.9rem;
+.forgot-password {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(30%);
   color: #666;
-  text-align: right;
-  margin-top: -10px;
+  font-size: 0.9rem;
 }
 
 .btn-dark,
@@ -118,7 +120,6 @@ h1.display-4 {
   border: 1px solid #ccc;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 180px; /* 设定按钮宽度 */
-  margin-right: 10px; /* 按钮之间留出间隙 */
 }
 
 .google-login img,
@@ -128,15 +129,19 @@ h1.display-4 {
 }
 
 .create-account-box {
-  background-color: #ffffff; /* 白色背景 */
+  background-color: transparent; /* 移除多余的背景 */
   border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
   text-align: center;
-  padding: 20px;
+}
+
+.create-account-button {
+  background-color: #ffffff; /* 只保留按钮的背景 */
+  border-radius: 10px;
+  padding: 10px 20px;
 }
 
 .not-member-text {
@@ -156,9 +161,6 @@ h1.display-4 {
   margin-top: auto;
   padding-top: 10px;
   padding-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   text-align: center;
 }
 
@@ -194,14 +196,5 @@ h1.display-4 {
 
 .form-group {
   position: relative;
-}
-
-.form-group small {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
-  font-size: 0.9rem;
 }
 </style>
