@@ -1,25 +1,50 @@
 <template>
-  <div class="login-page">
-    <div class="left-section">
-      <div class="logo">
-        <h1>SilverWell</h1>
+  <div class="container-fluid login-page">
+    <div class="nav-links text-right">
+      <a href="#" class="nav-link">About Us</a>
+      <a href="#" class="nav-link">Health Resources</a>
+      <a href="#" class="nav-link">Community Support</a>
+    </div>
+
+    <div class="row align-items-center justify-content-between">
+      <div class="col-md-5 text-left">
+        <h1 class="display-4 mb-4">SilverWell</h1>
+        <form>
+          <div class="form-group">
+            <input type="email" class="form-control mb-3" placeholder="Email" />
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control mb-2" placeholder="Password" />
+            <small class="form-text">Forgot password?</small>
+          </div>
+          <button type="submit" class="btn btn-dark btn-block mb-3">Log in</button>
+        </form>
+        <div class="social-login text-left">
+          <button class="btn btn-outline-secondary mb-2">
+            <img src="/icons/google-icon.png" alt="Google" class="mr-2" /> Google
+          </button>
+          <button class="btn btn-outline-secondary">
+            <img src="/icons/facebook-icon.png" alt="Facebook" class="mr-2" /> Facebook
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-5 text-center">
+        <div class="create-account-box p-4">
+          <p class="mb-4">Not a member?</p>
+          <button class="btn btn-light btn-block">Create an account</button>
+        </div>
       </div>
     </div>
-    <div class="right-section">
-      <nav class="navigation">
-        <a href="#">About Us</a>
-        <a href="#">Health Resources</a>
-        <a href="#">Community Support</a>
-        <a href="#">Contact Us</a>
-      </nav>
-      <div class="login-form">
-        <input type="email" placeholder="Email" />
-        <input type="text" placeholder="First Name" />
-        <button>Login</button>
-        <button>Sign up</button>
+
+    <footer class="footer mt-5 text-center">
+      <p class="mb-0">© copyright | Privacy Policy | +61 3000000000</p>
+      <div class="social-icons mt-2">
+        <img src="/icons/google-icon.png" alt="Icon1" class="mr-2" />
+        <img src="/icons/facebook-icon.png" alt="Icon2" class="mr-2" />
+        <img src="/icons/insta-icon.png" alt="Icon3" />
       </div>
-      <a href="#" class="admin-login">Login as admin</a>
-    </div>
+    </footer>
   </div>
 </template>
 
@@ -28,84 +53,110 @@
   background-color: #ddaa99;
   min-height: 100vh;
   display: flex;
-  align-items: center; /* Centers content vertically */
-  justify-content: space-between; /* Centers content horizontally */
-  padding: 20px;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.left-section {
-  flex: 1;
-  display: flex;
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
-}
-
-.right-section {
-  flex: 1;
-  display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: center; /* Center vertically */
+  justify-content: center;
+  padding: 0 50px;
 }
 
-.logo h1 {
-  font-size: 3em; /* Adjust the size as needed */
+.nav-links {
+  padding-top: 20px;
+  margin-bottom: 30px;
+}
+
+.nav-link {
   color: #333;
-}
-
-.navigation {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 40px;
-}
-
-.navigation a {
+  font-weight: bold;
+  margin-right: 15px;
   text-decoration: none;
-  color: #333;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+h1.display-4 {
   font-weight: bold;
 }
 
-.login-form {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.login-form input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.login-form button {
-  padding: 10px;
-  background-color: #333;
-  color: #fff;
+.form-control {
+  background-color: #f5c6c6;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 10px;
+  padding: 10px;
 }
 
-.social-login {
+.form-text {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: right;
+}
+
+.btn-dark,
+.btn-light {
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+.create-account-box {
+  background-color: #f5c6c6;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  color: #333;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer p {
+  margin: 0;
 }
 
 .social-login button {
-  background: none;
-  border: none;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 220px;
 }
 
-.admin-login {
+.social-login img {
+  width: 20px;
+  height: 20px;
+}
+
+.social-icons img {
+  width: 25px;
+  height: 25px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group small {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   color: #666;
-  text-decoration: none;
-  font-size: 0.9em;
+  font-size: 0.9rem;
 }
 </style>
