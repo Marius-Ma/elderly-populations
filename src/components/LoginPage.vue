@@ -16,13 +16,13 @@
             <input type="email" class="form-control mb-3" placeholder="Email" />
           </div>
           <div class="form-group position-relative">
-            <input type="password" class="form-control mb-2" placeholder="Password" />
+            <input type="password" class="form-control mb-3" placeholder="Password" />
             <small class="form-text forgot-password">Forgot password?</small>
           </div>
-          <button type="submit" class="btn btn-dark btn-block mb-3">Log in</button>
+          <button type="submit" class="btn btn-outline-dark btn-block mb-3 mt-4">Log in</button>
         </form>
         <div class="social-login d-flex justify-content-between">
-          <button class="btn btn-outline-secondary google-login">
+          <button class="btn btn-outline-secondary google-login mr-2">
             <img src="/icons/google-icon.png" alt="Google" class="mr-2" /> Google
           </button>
           <button class="btn btn-outline-secondary facebook-login">
@@ -49,11 +49,13 @@
     <!-- 页脚 -->
     <footer class="footer mt-5 text-center">
       <div class="footer-line"></div>
-      <p class="footer-text mb-0">© copyright | Privacy Policy | +61 3000000000</p>
-      <div class="social-icons mt-2">
-        <img src="/icons/google-icon.png" alt="Icon1" class="mr-2" />
-        <img src="/icons/facebook-icon.png" alt="Icon2" class="mr-2" />
-        <img src="/icons/insta-icon.png" alt="Icon3" />
+      <div class="d-flex justify-content-between align-items-center">
+        <p class="footer-text mb-0">© copyright | Privacy Policy | +61 3000000000</p>
+        <div class="social-icons mt-2">
+          <img src="/icons/google-icon.png" alt="Icon1" class="mr-2" />
+          <img src="/icons/facebook-icon.png" alt="Icon2" class="mr-2" />
+          <img src="/icons/insta-icon.png" alt="Icon3" />
+        </div>
       </div>
     </footer>
   </div>
@@ -101,16 +103,22 @@ h1.display-4 {
 .forgot-password {
   position: absolute;
   right: 0;
-  top: 50%;
-  transform: translateY(30%);
+  top: 100%;
   color: #666;
   font-size: 0.9rem;
 }
 
 .btn-dark,
-.btn-light {
+.btn-light,
+.btn-outline-dark {
   border-radius: 10px;
   padding: 10px 20px;
+  width: 100%; /* 确保按钮占据整个宽度 */
+}
+
+.btn-outline-dark:hover {
+  background-color: #000;
+  color: #fff;
 }
 
 .google-login,
@@ -120,6 +128,7 @@ h1.display-4 {
   border: 1px solid #ccc;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 180px; /* 设定按钮宽度 */
+  margin-top: 10px;
 }
 
 .google-login img,
@@ -136,6 +145,7 @@ h1.display-4 {
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin-top: 20px;
 }
 
 .create-account-button {
@@ -171,7 +181,7 @@ h1.display-4 {
 }
 
 .footer-text {
-  color: rgba(255, 255, 255, 0.7); /* 浅白色并带有不透明度 */
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -188,13 +198,8 @@ h1.display-4 {
   margin-left: 5px;
 }
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .form-group {
   position: relative;
+  margin-bottom: 20px;
 }
 </style>
