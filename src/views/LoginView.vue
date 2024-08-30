@@ -7,14 +7,14 @@
         <form @submit.prevent="submitForm">
           <div class="form-group">
             <input
-              type="email"
+              type="text"
               class="form-control mb-3"
-              placeholder="Email"
-              v-model="formData.email"
-              @blur="validateEmail(true)"
-              @input="validateEmail(false)"
+              placeholder="Username"
+              v-model="formData.username"
+              @blur="validateUsername(true)"
+              @input="validateUsername(false)"
             />
-            <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
+            <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
           </div>
           <div class="form-group position-relative">
             <input
@@ -49,7 +49,9 @@
       <!-- Right Section -->
       <div class="col-12 col-md-5 col-lg-4 col-xl-3 text-center">
         <div class="create-account-box">
-          <button class="btn btn-light btn-block create-account-button">Create an account</button>
+          <router-link to="/register" class="btn btn-light btn-block create-account-button"
+            >Create an account</router-link
+          >
         </div>
       </div>
     </div>
@@ -61,26 +63,26 @@
 <script setup>
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
+import { loginUser } from '@/auth.js'
 import { ref } from 'vue'
 
 const formData = ref({
-  email: '',
+  username: '',
   password: ''
 })
 
 const errors = ref({
-  email: null,
+  username: null,
   password: null
 })
 
-const validateEmail = (blur) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!formData.value.email) {
-    errors.value.email = 'Email is required.'
-  } else if (!emailRegex.test(formData.value.email)) {
-    if (blur) errors.value.email = 'Invalid email format.'
+const validateUsername = (blur) => {
+  if (!formData.value.username) {
+    if (blur) errors.value.username = 'Username is required.'
+  } else if (formData.value.username.length < 5) {
+    if (blur) errors.value.username = 'Username must be at least 5 characters long.'
   } else {
-    errors.value.email = null
+    errors.value.username = null
   }
 }
 
@@ -93,11 +95,14 @@ const validatePassword = () => {
 }
 
 const submitForm = () => {
-  validateEmail(true)
+  validateUsername(true)
   validatePassword()
-  if (!errors.value.email && !errors.value.password) {
-    alert('Form submitted successfully!')
-    // Add logic to handle successful form submission here
+
+  if (!errors.value.username && !errors.value.password) {
+    const username = formData.value.username
+    const password = formData.value.password
+
+    loginUser(username, password) // 调用登录方法
   }
 }
 </script>

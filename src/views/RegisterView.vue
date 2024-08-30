@@ -7,6 +7,19 @@
           <h1 class="text-center">Register</h1>
           <form @submit.prevent="submitForm">
             <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                v-model="formData.username"
+                @blur="() => validateUsername(true)"
+                @input="() => validateUsername(false)"
+              />
+              <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
+            </div>
+
+            <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <input
                 type="email"
@@ -60,6 +73,8 @@
               <div v-if="errors.birthdate" class="text-danger">{{ errors.birthdate }}</div>
             </div>
 
+            <div v-if="errorMessage" class="text-danger mb-3">{{ errorMessage }}</div>
+
             <div class="text-center">
               <button type="submit" class="btn btn-primary me-2">Register</button>
               <button type="button" class="btn btn-secondary" @click="clearForm">Clear</button>
@@ -73,11 +88,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
+import { registerUser } from '@/auth.js'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+import { ref } from 'vue'
 
 const formData = ref({
+  username: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -85,11 +105,24 @@ const formData = ref({
 })
 
 const errors = ref({
+  username: null,
   email: null,
   password: null,
   confirmPassword: null,
   birthdate: null
 })
+
+const errorMessage = ref(null)
+
+const validateUsername = (blur) => {
+  if (!formData.value.username) {
+    if (blur) errors.value.username = 'Username is required.'
+  } else if (formData.value.username.length < 5) {
+    if (blur) errors.value.username = 'Username must be at least 5 characters long.'
+  } else {
+    errors.value.username = null
+  }
+}
 
 const validateEmail = (blur) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -142,30 +175,47 @@ const validateBirthdate = (blur) => {
 }
 
 const submitForm = () => {
+  validateUsername(true)
   validateEmail(true)
   validatePassword(true)
   validateConfirmPassword(true)
   validateBirthdate(true)
 
   if (
+    !errors.value.username &&
     !errors.value.email &&
     !errors.value.password &&
     !errors.value.confirmPassword &&
     !errors.value.birthdate
   ) {
-    alert('Registration successful!')
-    clearForm()
+    const newUser = {
+      username: formData.value.username,
+      email: formData.value.email,
+      password: formData.value.password,
+      birthdate: formData.value.birthdate,
+      role: 'user'
+    }
+
+    const success = registerUser(newUser, (error) => {
+      errorMessage.value = error
+    })
+
+    if (success) {
+      router.push('/user/profile')
+    }
   }
 }
 
 const clearForm = () => {
   formData.value = {
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
     birthdate: ''
   }
   errors.value = {
+    username: null,
     email: null,
     password: null,
     confirmPassword: null,
