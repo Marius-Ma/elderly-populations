@@ -1,23 +1,31 @@
 <template>
-  <div class="container-fluid login-page">
-    <!-- 右上角导航栏 -->
-    <div class="nav-links text-right">
-      <a href="#" class="nav-link">About Us</a>
-      <a href="#" class="nav-link">Health Resources</a>
-      <a href="#" class="nav-link">Community Support</a>
-    </div>
-
+  <div class="container login-page">
+    <!-- Navigator -->
+    <Navigator />
     <div class="row align-items-center justify-content-between">
-      <!-- 左侧部分：Logo和登录表单 -->
-      <div class="col-12 col-md-5 text-left">
-        <h1 class="display-4 mb-4">SilverWell</h1>
-        <form>
+      <div class="col-12 col-md-5 col-lg-4 col-xl-3 text-left">
+        <form @submit.prevent="submitForm">
           <div class="form-group">
-            <input type="email" class="form-control mb-3" placeholder="Email" />
+            <input
+              type="email"
+              class="form-control mb-3"
+              placeholder="Email"
+              v-model="formData.email"
+              @blur="validateEmail(true)"
+              @input="validateEmail(false)"
+            />
+            <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
           </div>
           <div class="form-group position-relative">
-            <input type="password" class="form-control mb-3" placeholder="Password" />
+            <input
+              type="password"
+              class="form-control mb-3"
+              placeholder="Password"
+              v-model="formData.password"
+              @blur="validatePassword"
+            />
             <small class="form-text forgot-password">Forgot password?</small>
+            <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
           </div>
           <button type="submit" class="btn btn-outline-dark btn-block mb-3 mt-4">Log in</button>
         </form>
@@ -31,35 +39,68 @@
         </div>
       </div>
 
-      <!-- 中间的竖线 -->
+      <!-- Middle Line -->
       <div class="col-12 col-md-1 text-center my-3 my-md-0">
         <div class="vertical-line"></div>
         <div class="not-member-text">Not a member?</div>
         <div class="vertical-line"></div>
       </div>
 
-      <!-- 右侧部分：注册提示 -->
-      <div class="col-12 col-md-5 text-center">
+      <!-- Right Section -->
+      <div class="col-12 col-md-5 col-lg-4 col-xl-3 text-center">
         <div class="create-account-box">
           <button class="btn btn-light btn-block create-account-button">Create an account</button>
         </div>
       </div>
     </div>
-
-    <!-- 页脚 -->
-    <footer class="footer mt-5 text-center">
-      <div class="footer-line"></div>
-      <div class="d-flex justify-content-between align-items-center">
-        <p class="footer-text mb-0">© copyright | Privacy Policy | +61 3000000000</p>
-        <div class="social-icons mt-2">
-          <img src="/icons/google-icon.png" alt="Icon1" class="mr-2" />
-          <img src="/icons/facebook-icon.png" alt="Icon2" class="mr-2" />
-          <img src="/icons/insta-icon.png" alt="Icon3" />
-        </div>
-      </div>
-    </footer>
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>
+
+<script setup>
+import Navigator from '@/components/Navigator.vue'
+import Footer from '@/components/Footer.vue'
+import { ref } from 'vue'
+
+const formData = ref({
+  email: '',
+  password: ''
+})
+
+const errors = ref({
+  email: null,
+  password: null
+})
+
+const validateEmail = (blur) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!formData.value.email) {
+    errors.value.email = 'Email is required.'
+  } else if (!emailRegex.test(formData.value.email)) {
+    if (blur) errors.value.email = 'Invalid email format.'
+  } else {
+    errors.value.email = null
+  }
+}
+
+const validatePassword = () => {
+  if (!formData.value.password) {
+    errors.value.password = 'Password is required.'
+  } else {
+    errors.value.password = null
+  }
+}
+
+const submitForm = () => {
+  validateEmail(true)
+  validatePassword()
+  if (!errors.value.email && !errors.value.password) {
+    alert('Form submitted successfully!')
+    // Add logic to handle successful form submission here
+  }
+}
+</script>
 
 <style scoped>
 .login-page {
@@ -68,29 +109,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 50px;
-}
-
-.nav-links {
-  padding-top: 20px;
-  text-align: right;
-  margin-bottom: 30px;
-}
-
-.nav-link {
-  color: #4d4d4d; /* 深灰色 */
-  font-weight: bold;
-  margin-right: 15px;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.nav-link:hover {
-  text-decoration: underline;
-}
-
-h1.display-4 {
-  font-weight: bold;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 10%;
+  margin: 0 auto;
 }
 
 .form-control {
@@ -113,7 +135,7 @@ h1.display-4 {
 .btn-outline-dark {
   border-radius: 10px;
   padding: 10px 20px;
-  width: 100%; /* 确保按钮占据整个宽度 */
+  width: 100%;
 }
 
 .btn-outline-dark:hover {
@@ -127,18 +149,18 @@ h1.display-4 {
   color: #000000;
   border: 1px solid #ccc;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 180px; /* 设定按钮宽度 */
+  width: 180px;
   margin-top: 10px;
 }
 
 .google-login img,
 .facebook-login img {
-  width: 20px; /* 设定图片宽度 */
-  height: auto; /* 自动调整高度 */
+  width: 20px;
+  height: auto;
 }
 
 .create-account-box {
-  background-color: transparent; /* 移除多余的背景 */
+  background-color: transparent;
   border-radius: 10px;
   box-shadow: none;
   display: flex;
@@ -149,13 +171,13 @@ h1.display-4 {
 }
 
 .create-account-button {
-  background-color: #ffffff; /* 只保留按钮的背景 */
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 10px 20px;
 }
 
 .not-member-text {
-  color: rgba(255, 255, 255, 0.9); /* 纯白色带阴影 */
+  color: rgba(255, 255, 255, 0.9);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   font-weight: bold;
   margin: 15px 0;
@@ -167,35 +189,10 @@ h1.display-4 {
   margin: auto;
 }
 
-.footer {
-  margin-top: auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  text-align: center;
-}
-
-.footer-line {
-  border-top: 1px solid rgba(255, 255, 255, 0.7);
-  width: 100%;
-  margin-top: 10px;
-}
-
-.footer-text {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-  margin: 0;
-}
-
 .social-login {
   width: 100%;
   display: flex;
   justify-content: space-between;
-}
-
-.social-icons img {
-  width: 25px;
-  height: 25px;
-  margin-left: 5px;
 }
 
 .form-group {
