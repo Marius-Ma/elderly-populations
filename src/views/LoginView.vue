@@ -65,6 +65,8 @@ import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
 import { loginUser } from '@/auth.js'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const formData = ref({
   username: '',
@@ -102,7 +104,15 @@ const submitForm = () => {
     const username = formData.value.username
     const password = formData.value.password
 
-    loginUser(username, password) // 调用登录方法
+    const user = loginUser(username, password)
+
+    if (user) {
+      if (user.role === 'admin') {
+        router.push('/admin-dashboard')
+      } else {
+        router.push('/user/profile')
+      }
+    }
   }
 }
 </script>

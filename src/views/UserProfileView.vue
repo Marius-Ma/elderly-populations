@@ -20,6 +20,9 @@ import { ref } from 'vue'
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
 import { getLoggedInUser } from '@/auth.js'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const user = ref(getLoggedInUser())
 if (!user.value) {

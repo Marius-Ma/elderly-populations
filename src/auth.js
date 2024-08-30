@@ -1,7 +1,3 @@
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
 // hardcode admin
 const adminUser = {
   username: 'Delvin',
@@ -36,17 +32,19 @@ export const loginUser = (username, password) => {
 
   if (user) {
     localStorage.setItem('loggedInUser', JSON.stringify(user))
-    if (user.role === 'admin') {
-      router.push('/admin-dashboard')
-    } else {
-      router.push('/user-dashboard')
-    }
+    return user
   } else if (username === adminUser.username && password === adminUser.password) {
     localStorage.setItem('loggedInUser', JSON.stringify(adminUser))
-    router.push('/admin-dashboard')
+    return adminUser
   } else {
     alert('Invalid credentials')
+    return null
   }
+}
+
+export const logoutUser = () => {
+  localStorage.removeItem('loggedInUser')
+  return true
 }
 
 export const getLoggedInUser = () => {
