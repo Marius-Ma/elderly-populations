@@ -25,20 +25,31 @@ export const registerUser = (newUser, setError) => {
   return true
 }
 
-export const loginUser = (username, password) => {
+export const loginUser = (username, password, setError) => {
+  // 检查是否是硬编码的 admin 用户
+  if (username === adminUser.username) {
+    if (password === adminUser.password) {
+      localStorage.setItem('loggedInUser', JSON.stringify(adminUser))
+      return adminUser
+    } else {
+      setError('Incorrect password.')
+      return null
+    }
+  }
+
+  // 检查普通用户
   const users = JSON.parse(localStorage.getItem('users')) || []
+  const user = users.find((u) => u.username === username)
 
-  const user = users.find((u) => u.username === username && u.password === password)
-
-  if (user) {
+  if (!user) {
+    setError('Username does not exist.')
+    return null
+  } else if (user.password !== password) {
+    setError('Incorrect password.')
+    return null
+  } else {
     localStorage.setItem('loggedInUser', JSON.stringify(user))
     return user
-  } else if (username === adminUser.username && password === adminUser.password) {
-    localStorage.setItem('loggedInUser', JSON.stringify(adminUser))
-    return adminUser
-  } else {
-    alert('Invalid credentials')
-    return null
   }
 }
 

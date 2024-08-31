@@ -1,3 +1,4 @@
+<
 <template>
   <div class="container login-page">
     <!-- Navigator -->
@@ -26,6 +27,8 @@
             />
             <small class="form-text forgot-password">Forgot password?</small>
             <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
+            <div v-if="errors.login" class="text-danger">{{ errors.login }}</div>
+            <!-- 错误消息显示在这里 -->
           </div>
           <button type="submit" class="btn btn-outline-dark btn-block mb-3 mt-4">Log in</button>
         </form>
@@ -75,12 +78,17 @@ const formData = ref({
 
 const errors = ref({
   username: null,
-  password: null
+  password: null,
+  login: null // 用于显示登录错误
 })
 
 const validateUsername = (blur) => {
+  const specialCharPattern = /[^a-zA-Z0-9_]/
+
   if (!formData.value.username) {
     if (blur) errors.value.username = 'Username is required.'
+  } else if (specialCharPattern.test(formData.value.username)) {
+    errors.value.username = 'Username cannot contain special characters.'
   } else if (formData.value.username.length < 5) {
     if (blur) errors.value.username = 'Username must be at least 5 characters long.'
   } else {
@@ -104,9 +112,13 @@ const submitForm = () => {
     const username = formData.value.username
     const password = formData.value.password
 
-    const user = loginUser(username, password)
+    // 调用 loginUser 函数，并将错误处理逻辑传递给 setError
+    const user = loginUser(username, password, (errorMessage) => {
+      errors.value.login = errorMessage // 设置错误消息
+    })
 
     if (user) {
+      // 用户存在且登录成功，跳转到相应页面
       if (user.role === 'admin') {
         router.push('/admin/profile')
       } else {
@@ -130,6 +142,7 @@ const submitForm = () => {
   margin: 0 auto;
 }
 
+/* Additional styles */
 .form-control {
   background-color: #f5c6c6;
   border: none;
