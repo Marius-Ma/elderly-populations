@@ -3,6 +3,10 @@ import HomeView from '/src/views/HomeView.vue'
 import LoginView from '/src/views/LoginView.vue'
 import RegisterView from '/src/views/RegisterView.vue'
 import UserProfileView from '/src/views/UserProfileView.vue'
+import AdminProfileView from '/src/views/AdminProfileView.vue'
+import AboutUsView from '/src/views/AboutUsView.vue'
+import CommunitySupportView from '/src/views/CommunitySupportView.vue'
+import HaircutSupportView from '@/views/HaircutSupportView.vue'
 
 const routes = [
   {
@@ -24,12 +28,27 @@ const routes = [
     path: '/user/profile',
     name: 'UserProfile',
     component: UserProfileView
+  },
+  {
+    path: '/admin/profile',
+    name: 'AdminProfile',
+    component: AdminProfileView
+  },
+  {
+    path: '/about',
+    name: 'AboutUs',
+    component: AboutUsView
+  },
+  {
+    path: '/community-support',
+    name: 'CommunitySupport',
+    component: CommunitySupportView
+  },
+  {
+    path: '/community-support/haircut',
+    name: 'HaircutSupport',
+    component: HaircutSupportView
   }
-  // {
-  //   path: '/admin-dashboard',
-  //   name: 'AdminDashboard',
-  //   component: AdminDashboard
-  // }
 ]
 
 const router = createRouter({

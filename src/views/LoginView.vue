@@ -108,7 +108,7 @@ const submitForm = () => {
 
     if (user) {
       if (user.role === 'admin') {
-        router.push('/admin-dashboard')
+        router.push('/admin/profile')
       } else {
         router.push('/user/profile')
       }

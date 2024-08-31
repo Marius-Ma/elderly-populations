@@ -12,31 +12,55 @@
   </main>
 </template>
 
-<!-- <style scoped>
-header {
-  line-height: 1.5;
+<style>
+/* App.vue */
+body {
+  background-color: #ddaa99 !important;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+/* 全局容器样式 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+/* 全局按钮样式 */
+.btn {
+  padding: 10px 20px;
+  background-color: #8c5543;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
 }
-</style> -->
+
+.btn:hover {
+  background-color: #7a4a38;
+}
+
+/* 全局链接样式 */
+a {
+  color: #8c5543;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 全局背景色的全局样式 */
+.bg-light {
+  background-color: #ddaa99;
+}
+
+.bg-dark {
+  background-color: #333;
+  color: #fff;
+}
+</style>

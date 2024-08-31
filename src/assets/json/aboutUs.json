@@ -1,0 +1,20 @@
+{
+  "introduction": {
+    "title": "SilverWell - Caring for the Elderly",
+    "description": "At SilverWell, we are dedicated to enhancing the lives of the elderly through compassionate care and community involvement."
+  },
+  "services": [
+    {
+      "title": "Personal Care",
+      "description": "Providing personal assistance to ensure comfort and dignity."
+    },
+    {
+      "title": "Community Support",
+      "description": "Building a strong community with supportive services for all."
+    }
+  ],
+  "mission": {
+    "title": "Our Mission",
+    "description": "To provide high-quality care for the elderly while fostering a sense of belonging and community."
+  }
+}
