@@ -11,11 +11,13 @@
         </p>
       </div>
 
-      <div v-if="isUser && isLoggedIn" class="box rating-section">
-        <h3>Rate this Service</h3>
-        <div class="stars">
+      <div class="box rating-section">
+        <h3>Overall Rating: {{ averageRating }} / 5</h3>
+        <p>{{ totalRatings }} users have rated this service.</p>
+
+        <div v-if="isUser && isLoggedIn" class="stars">
           <span
-            v-for="(star, index) in 5"
+            v-for="(, index) in 5"
             :key="index"
             class="star"
             @click="toggleRating(index)"
@@ -28,11 +30,12 @@
           </span>
         </div>
         <p v-if="totalRating">You rated this service: {{ totalRating }}</p>
-        <button class="btn-submit" @click="submitRating">Submit Rating</button>
+        <button v-if="isUser && isLoggedIn" class="btn-submit" @click="submitRating">
+          Submit Rating
+        </button>
+        <p v-else-if="isLoggedIn && isAdminUser">Ratings are available only for regular users.</p>
+        <p v-else class="box">Please log in to rate this service.</p>
       </div>
-
-      <p v-else-if="isLoggedIn && isAdminUser">Ratings are available only for regular users.</p>
-      <p v-else class="box">Please log in to rate this service.</p>
     </div>
     <Footer />
   </div>
@@ -41,23 +44,33 @@
 <script setup>
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { isAdmin, isUserLoggedIn, getLoggedInUser } from '@/auth.js'
 
+// Simulated backend using localStorage for ratings
+const storedRatings = ref(JSON.parse(localStorage.getItem('serviceRatings')) || [])
+const totalRatings = ref(storedRatings.value.length)
+const totalRatingSum = ref(storedRatings.value.reduce((acc, rating) => acc + rating, 0))
+
+// Calculate average rating
+const averageRating = computed(() => {
+  if (totalRatings.value === 0) return 0
+  return (totalRatingSum.value / totalRatings.value).toFixed(1)
+})
+
 const isLoggedIn = computed(() => isUserLoggedIn())
-
 const user = computed(() => getLoggedInUser())
-
 const isUser = computed(() => user.value && !isAdmin())
-
 const isAdminUser = computed(() => user.value && isAdmin())
 
+// User-specific ratings
 const ratings = ref([0, 0, 0, 0, 0])
 const hoverRating = ref([0, 0, 0, 0, 0])
 const lastRatedIndex = ref(-1)
 
 const totalRating = computed(() => ratings.value.reduce((acc, cur) => acc + cur, 0))
 
+// Strict star rating logic
 const toggleRating = (index) => {
   if (canRate(index)) {
     if (ratings.value[index] === 0) {
@@ -67,8 +80,7 @@ const toggleRating = (index) => {
     } else {
       ratings.value[index] = 0
     }
-
-    // 更新最后被操作的星星索引
+    // Update last rated index
     if (ratings.value[index] === 0) {
       if (index === lastRatedIndex.value) {
         let newIndex = index - 1
@@ -87,7 +99,6 @@ const canRate = (index) => {
   if (lastRatedIndex.value === -1) {
     return index === 0
   }
-
   if (ratings.value[lastRatedIndex.value] === 0.5) {
     return index === lastRatedIndex.value
   } else {
@@ -112,10 +123,18 @@ const getStarWidth = (index) => {
   return 0
 }
 
-// 提交评分
+// Submit rating and store in localStorage
 const submitRating = () => {
-  const totalRating = ratings.value.reduce((acc, cur) => acc + cur, 0)
-  alert(`You have submitted a rating of ${totalRating} out of 5!`)
+  const userTotalRating = ratings.value.reduce((acc, cur) => acc + cur, 0)
+  if (userTotalRating > 0) {
+    storedRatings.value.push(userTotalRating)
+    totalRatings.value = storedRatings.value.length
+    totalRatingSum.value = storedRatings.value.reduce((acc, rating) => acc + rating, 0)
+    localStorage.setItem('serviceRatings', JSON.stringify(storedRatings.value))
+    alert(`You have submitted a rating of ${userTotalRating} out of 5!`)
+  } else {
+    alert('Please select a rating before submitting.')
+  }
 }
 </script>
 

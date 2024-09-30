@@ -1,8 +1,10 @@
-<
 <template>
   <div class="container login-page">
     <!-- Navigator -->
     <Navigator />
+    <div class="login">
+      <h1>Log In</h1>
+    </div>
     <div class="row align-items-center justify-content-between">
       <div class="col-12 col-md-5 col-lg-4 col-xl-3 text-left">
         <form @submit.prevent="submitForm">
@@ -79,7 +81,7 @@ const formData = ref({
 const errors = ref({
   username: null,
   password: null,
-  login: null // 用于显示登录错误
+  login: null
 })
 
 const validateUsername = (blur) => {

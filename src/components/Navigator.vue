@@ -7,11 +7,8 @@
         </router-link>
       </div>
       <div class="nav-links">
-        <!-- 公共链接 -->
         <router-link to="/about" class="nav-link">About Us</router-link>
         <router-link to="/health-resources" class="nav-link">Health Resources</router-link>
-
-        <!-- Community Support 下拉菜单 -->
         <div class="dropdown" @mouseenter="openSupportDropdown" @mouseleave="closeSupportDropdown">
           <router-link to="/community-support" class="nav-link">Community Support</router-link>
           <div v-if="supportDropdownOpen" class="dropdown-menu">

@@ -90,8 +90,12 @@
 <script setup>
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
-import { registerUser } from '@/auth.js'
 import { useRouter } from 'vue-router'
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+
+const auth = getAuth()
+const db = getFirestore()
 const router = useRouter()
 
 import { ref } from 'vue'
@@ -174,7 +178,7 @@ const validateBirthdate = (blur) => {
   }
 }
 
-const submitForm = () => {
+const submitForm = async () => {
   validateUsername(true)
   validateEmail(true)
   validatePassword(true)
@@ -188,24 +192,31 @@ const submitForm = () => {
     !errors.value.confirmPassword &&
     !errors.value.birthdate
   ) {
-    const newUser = {
-      username: formData.value.username,
-      email: formData.value.email,
-      password: formData.value.password,
-      birthdate: formData.value.birthdate,
-      role: 'user'
-    }
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.value.email,
+        formData.value.password
+      )
 
-    const success = registerUser(newUser, (error) => {
-      errorMessage.value = error
-    })
+      // Get the registered user
+      const user = userCredential.user
 
-    if (success) {
+      // Save user data to Firestore (like username, birthdate, role)
+      await setDoc(doc(db, 'users', user.uid), {
+        username: formData.value.username,
+        email: formData.value.email,
+        birthdate: formData.value.birthdate,
+        role: 'user' // Assign user role
+      })
+
+      // Redirect user to profile page
       router.push('/user/profile')
+    } catch (error) {
+      errorMessage.value = error.message
     }
   }
 }
-
 const clearForm = () => {
   formData.value = {
     username: '',
