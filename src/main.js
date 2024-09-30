@@ -1,14 +1,11 @@
 import './assets/main.css'
-
 import { createApp } from 'vue'
 import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import router from './router'
+import store from '@/store/store'
 
-const app = createApp(App)
-app.use(router)
-
-app.mount('#app')
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 // TODO: Add SDKs for Firebase products that you want to use
@@ -26,3 +23,18 @@ const firebaseConfig = {
 
 // Initialize Firebase
 initializeApp(firebaseConfig)
+
+const auth = getAuth()
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    store.commit('setUser', user) // 更新 Vuex 中的用户状态
+  } else {
+    store.commit('clearUser')
+  }
+})
+
+const app = createApp(App)
+app.use(router)
+app.use(store)
+app.mount('#app')

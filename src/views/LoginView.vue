@@ -12,12 +12,12 @@
             <input
               type="text"
               class="form-control mb-3"
-              placeholder="Username"
-              v-model="formData.username"
-              @blur="validateUsername(true)"
-              @input="validateUsername(false)"
+              placeholder="Email"
+              v-model="formData.email"
+              @blur="validateEmail(true)"
+              @input="validateEmail(false)"
             />
-            <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
+            <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
           </div>
           <div class="form-group position-relative">
             <input
@@ -68,33 +68,34 @@
 <script setup>
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
-import { loginUser } from '@/auth.js'
 import { ref } from 'vue'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { getFirestore, doc, getDoc } from 'firebase/firestore'
 import { useRouter } from 'vue-router'
+
+const auth = getAuth()
+const db = getFirestore()
 const router = useRouter()
 
 const formData = ref({
-  username: '',
+  email: '',
   password: ''
 })
 
 const errors = ref({
-  username: null,
+  email: null,
   password: null,
   login: null
 })
 
-const validateUsername = (blur) => {
-  const specialCharPattern = /[^a-zA-Z0-9_]/
-
-  if (!formData.value.username) {
-    if (blur) errors.value.username = 'Username is required.'
-  } else if (specialCharPattern.test(formData.value.username)) {
-    errors.value.username = 'Username cannot contain special characters.'
-  } else if (formData.value.username.length < 5) {
-    if (blur) errors.value.username = 'Username must be at least 5 characters long.'
+const validateEmail = (blur) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!formData.value.email) {
+    errors.value.email = 'Email is required.'
+  } else if (!emailRegex.test(formData.value.email)) {
+    if (blur) errors.value.email = 'Invalid email format.'
   } else {
-    errors.value.username = null
+    errors.value.email = null
   }
 }
 
@@ -106,26 +107,36 @@ const validatePassword = () => {
   }
 }
 
-const submitForm = () => {
-  validateUsername(true)
+const submitForm = async () => {
+  validateEmail()
   validatePassword()
 
-  if (!errors.value.username && !errors.value.password) {
-    const username = formData.value.username
-    const password = formData.value.password
+  if (!errors.value.email && !errors.value.password) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.value.email,
+        formData.value.password
+      )
 
-    // 调用 loginUser 函数，并将错误处理逻辑传递给 setError
-    const user = loginUser(username, password, (errorMessage) => {
-      errors.value.login = errorMessage // 设置错误消息
-    })
+      const user = userCredential.user
+      console.log('User logged in:', user)
 
-    if (user) {
-      // 用户存在且登录成功，跳转到相应页面
-      if (user.role === 'admin') {
-        router.push('/admin/profile')
-      } else {
-        router.push('/user/profile')
+      // Fetch additional user data (e.g., username, birthdate, role) from Firestore
+      const userDoc = await getDoc(doc(db, 'users', user.uid))
+      if (userDoc.exists()) {
+        const userData = userDoc.data()
+        console.log('User data from Firestore:', userData)
+
+        // Redirect based on role or other conditions
+        if (userData.role === 'admin') {
+          router.push('/admin/profile')
+        } else {
+          router.push('/user/profile')
+        }
       }
+    } catch (error) {
+      errors.value.login = 'Login failed: ' + error.message
     }
   }
 }
