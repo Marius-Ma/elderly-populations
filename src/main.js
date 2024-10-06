@@ -28,7 +28,7 @@ const auth = getAuth()
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    store.commit('setUser', user) // 更新 Vuex 中的用户状态
+    store.commit('setUser', user)
   } else {
     store.commit('clearUser')
   }

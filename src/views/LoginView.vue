@@ -1,66 +1,66 @@
 <template>
+  <Navigator />
   <div class="container login-page">
-    <!-- Navigator -->
-    <Navigator />
-    <div class="login">
-      <h1>Log In</h1>
-    </div>
-    <div class="row align-items-center justify-content-between">
-      <div class="col-12 col-md-5 col-lg-4 col-xl-3 text-left">
-        <form @submit.prevent="submitForm">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control mb-3"
-              placeholder="Email"
-              v-model="formData.email"
-              @blur="validateEmail(true)"
-              @input="validateEmail(false)"
-            />
-            <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
+    <!-- 内容区域容器 -->
+    <div class="content-wrapper">
+      <div class="login">
+        <h1>Log In</h1>
+      </div>
+      <div class="row align-items-center justify-content-between">
+        <div class="col-12 col-md-5 col-lg-4 col-xl-3 text-left">
+          <form @submit.prevent="submitForm">
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control mb-3"
+                placeholder="Email"
+                v-model="formData.email"
+                @blur="validateEmail(true)"
+                @input="validateEmail(false)"
+              />
+              <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
+            </div>
+            <div class="form-group position-relative">
+              <input
+                type="password"
+                class="form-control mb-3"
+                placeholder="Password"
+                v-model="formData.password"
+                @blur="validatePassword"
+              />
+              <small class="form-text forgot-password">Forgot password?</small>
+              <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
+              <div v-if="errors.login" class="text-danger">{{ errors.login }}</div>
+            </div>
+            <button type="submit" class="btn btn-outline-dark btn-block mb-3 mt-4">Log in</button>
+          </form>
+          <div class="social-login d-flex justify-content-between">
+            <button class="btn btn-outline-secondary google-login mr-2">
+              <img src="/icons/google-icon.png" alt="Google" class="mr-2" /> Google
+            </button>
+            <button class="btn btn-outline-secondary facebook-login">
+              <img src="/icons/facebook-icon.png" alt="Facebook" class="mr-2" /> Facebook
+            </button>
           </div>
-          <div class="form-group position-relative">
-            <input
-              type="password"
-              class="form-control mb-3"
-              placeholder="Password"
-              v-model="formData.password"
-              @blur="validatePassword"
-            />
-            <small class="form-text forgot-password">Forgot password?</small>
-            <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
-            <div v-if="errors.login" class="text-danger">{{ errors.login }}</div>
-            <!-- 错误消息显示在这里 -->
+        </div>
+
+        <!-- Middle Line -->
+        <div class="col-12 col-md-1 text-center my-3 my-md-0">
+          <div class="vertical-line"></div>
+          <div class="not-member-text">Not a member?</div>
+          <div class="vertical-line"></div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="col-12 col-md-5 col-lg-4 col-xl-3 text-center">
+          <div class="create-account-box">
+            <router-link to="/register" class="btn btn-light btn-block create-account-button">
+              Create an account
+            </router-link>
           </div>
-          <button type="submit" class="btn btn-outline-dark btn-block mb-3 mt-4">Log in</button>
-        </form>
-        <div class="social-login d-flex justify-content-between">
-          <button class="btn btn-outline-secondary google-login mr-2">
-            <img src="/icons/google-icon.png" alt="Google" class="mr-2" /> Google
-          </button>
-          <button class="btn btn-outline-secondary facebook-login">
-            <img src="/icons/facebook-icon.png" alt="Facebook" class="mr-2" /> Facebook
-          </button>
         </div>
       </div>
-
-      <!-- Middle Line -->
-      <div class="col-12 col-md-1 text-center my-3 my-md-0">
-        <div class="vertical-line"></div>
-        <div class="not-member-text">Not a member?</div>
-        <div class="vertical-line"></div>
-      </div>
-
-      <!-- Right Section -->
-      <div class="col-12 col-md-5 col-lg-4 col-xl-3 text-center">
-        <div class="create-account-box">
-          <router-link to="/register" class="btn btn-light btn-block create-account-button"
-            >Create an account</router-link
-          >
-        </div>
-      </div>
     </div>
-    <!-- Footer -->
     <Footer />
   </div>
 </template>
@@ -136,7 +136,8 @@ const submitForm = async () => {
         }
       }
     } catch (error) {
-      errors.value.login = 'Login failed: ' + error.message
+      // Log the entire error to see what Firebase is returning
+      errors.value.login = 'Username or password is incorrect. Please try again.'
     }
   }
 }
@@ -145,14 +146,20 @@ const submitForm = async () => {
 <style scoped>
 .login-page {
   background-color: #ddaa99;
-  min-height: 100vh;
+  min-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
-  max-width: 100%;
-  padding: 0 10%;
-  margin: 0 auto;
+  padding: 0 5%;
+  flex-grow: 1;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  min-height: 0;
 }
 
 /* Additional styles */

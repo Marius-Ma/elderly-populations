@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer mt-5 text-center">
+  <footer class="footer">
     <div class="footer-line"></div>
     <div class="d-flex justify-content-between align-items-center">
       <p class="footer-text mb-0">© copyright | Privacy Policy | +61 3000000000</p>
@@ -13,8 +13,10 @@
 </template>
 
 <style scoped>
-.footer {
-  margin-top: auto;
+footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+  width: 100%;
+  background-color: #ddaa99;
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: center;
@@ -22,7 +24,6 @@
 
 .footer-line {
   border-top: 1px solid rgba(255, 255, 255, 0.7);
-  width: 100%;
   margin-top: 10px;
 }
 

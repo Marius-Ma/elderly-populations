@@ -33,3 +33,57 @@ a,
     padding: 0 2rem;
   }
 } */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 避免横向滚动 */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.navigator,
+.footer {
+  padding: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .login-page {
+    padding: 10px;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .navigator,
+  .footer {
+    padding: 5px 10px;
+  }
+
+  .logo h1 {
+    font-size: 36px;
+  }
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 确保页面内容至少占满整个屏幕高度 */
+}
+
+.login-page {
+  flex-grow: 1; /* 使 login-page 占据剩余空间，确保内容能填充页面 */
+}

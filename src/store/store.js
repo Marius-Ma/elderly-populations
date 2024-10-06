@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 
 const store = createStore({
   state: {
-    user: null // 存储 Firebase 用户对象
+    user: null
   },
   mutations: {
     setUser(state, user) {

@@ -1,7 +1,7 @@
 <template>
   <div v-if="aboutUs.introduction">
+    <Navigator />
     <div class="about-us container">
-      <Navigator />
       <section class="hero">
         <div class="hero-content">
           <h1>{{ aboutUs.introduction.title }}</h1>
@@ -26,8 +26,8 @@
         <h2>{{ aboutUs.mission.title }}</h2>
         <p>{{ aboutUs.mission.description }}</p>
       </section>
+      <Footer />
     </div>
-    <Footer />
   </div>
 </template>
 
@@ -40,7 +40,6 @@ import Footer from '@/components/Footer.vue'
 const aboutUs = ref({})
 
 onMounted(() => {
-  // 模拟异步加载数据
   aboutUs.value = aboutUsData
 })
 </script>

@@ -165,6 +165,10 @@ const handleLogout = () => {
   align-items: flex-start;
   background-color: #ddaa99;
   padding: 10px 20px;
+  position: sticky; /* or position: fixed */
+  top: 0;
+  width: 100%; /* Make sure it stretches across the full viewport */
+  z-index: 1000; /* Ensure it's always on top */
 }
 
 .top-nav {
