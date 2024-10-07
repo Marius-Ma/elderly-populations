@@ -15,7 +15,14 @@
           <h3>Grocery Shopping</h3>
           <p>Assistance with weekly grocery shopping and delivery.</p>
           <div class="btn-group">
-            <button class="btn" @click="openBookingModal('Grocery Shopping')">Book</button>
+            <button
+              class="btn"
+              :disabled="!canBook"
+              :style="{ cursor: canBook ? 'pointer' : 'not-allowed' }"
+              @click="canBook ? openBookingModal('Grocery Shopping') : null"
+            >
+              Book
+            </button>
             <router-link to="/support/grocery" class="btn">Learn More</router-link>
           </div>
         </div>
@@ -24,7 +31,14 @@
           <h3>Haircut Services</h3>
           <p>Regular haircut and grooming services at your convenience.</p>
           <div class="btn-group">
-            <button class="btn" @click="openBookingModal('Haircut Services')">Book</button>
+            <button
+              class="btn"
+              :disabled="!canBook"
+              :style="{ cursor: canBook ? 'pointer' : 'not-allowed' }"
+              @click="canBook ? openBookingModal('Haircut Services') : null"
+            >
+              Book
+            </button>
             <router-link to="/community-support/haircut" class="btn">Learn More</router-link>
           </div>
         </div>
@@ -40,7 +54,14 @@
           <h3>Book Club</h3>
           <p>Join our weekly book club to engage with fellow members.</p>
           <div class="btn-group">
-            <button class="btn" @click="openBookingModal('Book Club')">Book</button>
+            <button
+              class="btn"
+              :disabled="!canBook"
+              :style="{ cursor: canBook ? 'pointer' : 'not-allowed' }"
+              @click="canBook ? openBookingModal('Book Club') : null"
+            >
+              Book
+            </button>
             <router-link to="/activities/bookclub" class="btn">Learn More</router-link>
           </div>
         </div>
@@ -49,7 +70,14 @@
           <h3>Baker Class</h3>
           <p>Participate in our social baker class for some fun and enjoy the food.</p>
           <div class="btn-group">
-            <button class="btn" @click="openBookingModal('Baker Class')">Book</button>
+            <button
+              class="btn"
+              :disabled="!canBook"
+              :style="{ cursor: canBook ? 'pointer' : 'not-allowed' }"
+              @click="canBook ? openBookingModal('Baker Class') : null"
+            >
+              Book
+            </button>
             <router-link to="/activities/baker" class="btn">Learn More</router-link>
           </div>
         </div>
@@ -65,7 +93,15 @@
           <h3>Medical Assistance</h3>
           <p>Quick access to medical help in case of emergencies.</p>
           <div class="btn-group">
-            <button class="btn" @click="makeEmergencyCall">Call</button>
+            <button
+              class="btn"
+              :disabled="!canCall"
+              :style="{ cursor: canCall ? 'pointer' : 'not-allowed' }"
+              @click="canCall ? makeEmergencyCall() : null"
+            >
+              Call
+            </button>
+
             <router-link to="/support/medical" class="btn">Learn More</router-link>
           </div>
         </div>
@@ -74,7 +110,15 @@
           <h3>Emergency Contact</h3>
           <p>24/7 emergency contact services for immediate support.</p>
           <div class="btn-group">
-            <button class="btn" @click="makeEmergencyCall">Call</button>
+            <button
+              class="btn"
+              :disabled="!canCall"
+              :style="{ cursor: canCall ? 'pointer' : 'not-allowed' }"
+              @click="canCall ? makeEmergencyCall() : null"
+            >
+              Call
+            </button>
+
             <router-link to="/support/emergency-contact" class="btn">Learn More</router-link>
           </div>
         </div>
@@ -92,30 +136,45 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { getFirestore, collection, addDoc } from 'firebase/firestore'
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
 import BookingModal from '@/components/BookingModal.vue'
 import { getAuth } from 'firebase/auth'
+import { useStore } from 'vuex' // 使用 Vuex 访问全局状态
+
+const store = useStore()
+const isLoggedIn = computed(() => store.getters.isUserLoggedIn)
+const isAdminUser = computed(() => store.getters.isAdmin)
+const canBook = computed(() => isLoggedIn.value && !isAdminUser.value)
+const canCall = computed(() => isLoggedIn.value && !isAdminUser.value)
 
 const isBookingModalOpen = ref(false)
 const selectedService = ref('')
 
-//booking modal function, replace this with the actual logic
+// Firebase Firestore
+const db = getFirestore()
+
+// 打开预定模态框
 const openBookingModal = (serviceName) => {
+  if (!canBook.value) {
+    alert('You must be logged in as a user to book services.')
+    return
+  }
   selectedService.value = serviceName
   isBookingModalOpen.value = true
-  console.log('Modal Opened:', isBookingModalOpen.value)
 }
 
+// 关闭预定模态框
 const closeBookingModal = () => {
-  isBookingModalOpen.value = false // 关闭预定模态框
-  console.log('Modal Closed:', isBookingModalOpen.value)
+  isBookingModalOpen.value = false
 }
 
+// 提交预定（发送邮件 + 存储到 Firestore）
 const submitBooking = async (bookingDetails) => {
   const auth = getAuth()
-  const userId = auth.currentUser?.uid // 获取当前登录用户的UID
+  const userId = auth.currentUser?.uid
 
   if (!userId) {
     alert('User not logged in. Please log in first.')
@@ -123,6 +182,15 @@ const submitBooking = async (bookingDetails) => {
   }
 
   try {
+    // 保存预定信息到 Firestore
+    await addDoc(collection(db, 'bookings'), {
+      userId: userId,
+      serviceName: selectedService.value,
+      bookingDetails: bookingDetails,
+      timestamp: new Date()
+    })
+
+    // 发送邮件
     const response = await fetch('http://localhost:3000/send-email', {
       method: 'POST',
       headers: {
@@ -140,17 +208,16 @@ const submitBooking = async (bookingDetails) => {
       alert('Failed to send booking.')
     }
   } catch (error) {
-    console.error('Error sending booking:', error)
-    alert('Failed to send booking.')
+    console.error('Error submitting booking:', error)
+    alert('Failed to submit booking.')
   }
 
   closeBookingModal()
 }
 
-// Mock emergency call function
+// 模拟紧急电话功能
 const makeEmergencyCall = () => {
   alert('Dialing emergency contact')
-  // Handle the logic for calling emergency services
 }
 </script>
 
@@ -219,23 +286,28 @@ const makeEmergencyCall = () => {
 
 .btn-group {
   display: flex;
-  justify-content: space-between; /* 保证左右分布 */
-  gap: 15px; /* 增加按钮之间的间距 */
+  justify-content: space-between;
+  gap: 15px;
 }
 
 .btn {
-  padding: 8px 15px; /* 调整按钮的内边距，缩小大小 */
+  padding: 8px 15px;
   background-color: #8c5543;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   text-decoration: none;
-  min-width: 100px; /* 限制按钮的最小宽度，使其不会太长 */
-  text-align: center; /* 确保文本居中 */
+  min-width: 100px;
+  text-align: center;
 }
 
 .btn:hover {
   background-color: #7a4a38;
+}
+
+.btn[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

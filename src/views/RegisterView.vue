@@ -73,6 +73,14 @@
               <div v-if="errors.birthdate" class="text-danger">{{ errors.birthdate }}</div>
             </div>
 
+            <div class="mb-3">
+              <label for="role" class="form-label">Register as</label>
+              <select id="role" class="form-control" v-model="formData.role">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
             <div v-if="errorMessage" class="text-danger mb-3">{{ errorMessage }}</div>
 
             <div class="text-center">
@@ -185,6 +193,11 @@ const submitForm = async () => {
   validateConfirmPassword(true)
   validateBirthdate(true)
 
+  if (formData.value.role === 'admin' && !formData.value.email.endsWith('@student.monash.edu')) {
+    errorMessage.value = 'You are not authorized to register as an Admin.'
+    return
+  }
+
   if (
     !errors.value.username &&
     !errors.value.email &&
@@ -207,11 +220,12 @@ const submitForm = async () => {
         username: formData.value.username,
         email: formData.value.email,
         birthdate: formData.value.birthdate,
-        role: 'user' // Assign user role
+        role: formData.value.role
       })
 
       // Redirect user to profile page
-      router.push('/user/profile')
+      const redirectPath = formData.value.role === 'admin' ? '/admin/profile' : '/user/profile'
+      router.push(redirectPath)
     } catch (error) {
       errorMessage.value = error.message
     }

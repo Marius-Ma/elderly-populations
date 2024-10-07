@@ -72,16 +72,16 @@
         >Manage Users</router-link
       >
       <router-link
+        to="/admin/data"
+        class="admin-nav-link"
+        :class="{ active: isActive('/admin/booking') }"
+        >Manage Booking</router-link
+      >
+      <router-link
         to="/admin/settings"
         class="admin-nav-link"
         :class="{ active: isActive('/admin/settings') }"
         >Settings</router-link
-      >
-      <router-link
-        to="/admin/data"
-        class="admin-nav-link"
-        :class="{ active: isActive('/admin/data') }"
-        >Data Overview</router-link
       >
       <button @click="handleLogout" class="admin-nav-link logout">Logout</button>
     </div>
@@ -101,6 +101,10 @@
         >Settings</router-link
       >
       <button @click="handleLogout" class="user-nav-link logout">Logout</button>
+    </div>
+    <div class="accessibility-controls">
+      <button @click="decreaseFontSize">A-</button>
+      <button @click="increaseFontSize">A+</button>
     </div>
   </div>
 </template>
@@ -155,6 +159,14 @@ const handleLogout = () => {
     store.commit('clearUser') // Clear user from Vuex store
     router.push('/login') // Redirect to login page
   })
+}
+
+const increaseFontSize = () => {
+  store.commit('increaseFontSize')
+}
+
+const decreaseFontSize = () => {
+  store.commit('decreaseFontSize')
 }
 </script>
 
@@ -280,5 +292,19 @@ const handleLogout = () => {
 .admin-nav-link.active {
   background-color: #d88;
   color: #fff;
+}
+
+.accessibility-controls button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.accessibility-controls button:hover {
+  background-color: #555;
 }
 </style>

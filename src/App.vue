@@ -7,10 +7,24 @@
     </div>
   </header> -->
 
-  <main>
-    <router-view></router-view>
-  </main>
+  <div :style="{ fontSize: fontSize }">
+    <router-view />
+  </div>
 </template>
+
+<script setup>
+import { computed, watch } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+const fontSize = computed(() => store.getters.currentFontSize)
+
+// 监听 fontSize 的变化并更新全局变量
+watch(fontSize, (newSize) => {
+  document.documentElement.style.setProperty('--global-font-size', newSize)
+})
+</script>
 
 <style>
 /* App.vue */
