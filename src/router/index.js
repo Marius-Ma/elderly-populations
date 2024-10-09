@@ -7,6 +7,8 @@ import AdminProfileView from '/src/views/AdminProfileView.vue'
 import AboutUsView from '/src/views/AboutUsView.vue'
 import CommunitySupportView from '/src/views/CommunitySupportView.vue'
 import HaircutSupportView from '@/views/HaircutSupportView.vue'
+import ManageBookingView from '@/views/ManageBookingView.vue'
+import ManageUsersView from '@/views/ManageUsersView.vue'
 
 const routes = [
   {
@@ -33,6 +35,16 @@ const routes = [
     path: '/admin/profile',
     name: 'AdminProfile',
     component: AdminProfileView
+  },
+  {
+    path: '/admin/manage-booking',
+    name: 'ManageBooking',
+    component: ManageBookingView
+  },
+  {
+    path: '/admin/manage-users',
+    name: 'ManageUsers',
+    component: ManageUsersView
   },
   {
     path: '/about',

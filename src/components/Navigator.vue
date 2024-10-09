@@ -66,15 +66,15 @@
         >Profile</router-link
       >
       <router-link
-        to="/admin/users"
+        to="/admin/manage-users"
         class="admin-nav-link"
-        :class="{ active: isActive('/admin/users') }"
+        :class="{ active: isActive('/admin/manage-users') }"
         >Manage Users</router-link
       >
       <router-link
-        to="/admin/data"
+        to="/admin/manage-booking"
         class="admin-nav-link"
-        :class="{ active: isActive('/admin/booking') }"
+        :class="{ active: isActive('/admin/manage-booking') }"
         >Manage Booking</router-link
       >
       <router-link
@@ -131,7 +131,9 @@ const loginIconLink = computed(() =>
 
 const isUserDashboardPage = computed(() => ['/user/profile', '/user/settings'].includes(route.path))
 const isAdminDashboardPage = computed(() =>
-  ['/admin/profile', '/admin/users', '/admin/settings', '/admin/data'].includes(route.path)
+  ['/admin/profile', '/admin/manage-users', '/admin/settings', '/admin/manage-booking'].includes(
+    route.path
+  )
 )
 
 const openDropdown = () => {

@@ -142,7 +142,9 @@ import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
 import BookingModal from '@/components/BookingModal.vue'
 import { getAuth } from 'firebase/auth'
-import { useStore } from 'vuex' // 使用 Vuex 访问全局状态
+import { useStore } from 'vuex'
+import { Timestamp } from 'firebase/firestore'
+import dayjs from 'dayjs'
 
 const store = useStore()
 const isLoggedIn = computed(() => store.getters.isUserLoggedIn)
@@ -171,7 +173,6 @@ const closeBookingModal = () => {
   isBookingModalOpen.value = false
 }
 
-// 提交预定（发送邮件 + 存储到 Firestore）
 const submitBooking = async (bookingDetails) => {
   const auth = getAuth()
   const userId = auth.currentUser?.uid
@@ -182,12 +183,23 @@ const submitBooking = async (bookingDetails) => {
   }
 
   try {
-    // 保存预定信息到 Firestore
+    const validDate = dayjs(bookingDetails.date).isValid()
+      ? dayjs(bookingDetails.date).toDate()
+      : null
+
+    if (!validDate) {
+      throw new Error('Invalid date value.')
+    }
+
     await addDoc(collection(db, 'bookings'), {
       userId: userId,
+      userEmail: auth.currentUser.email,
       serviceName: selectedService.value,
-      bookingDetails: bookingDetails,
-      timestamp: new Date()
+      bookingDetails: {
+        date: Timestamp.fromDate(validDate), // 使用有效的 JavaScript 日期对象转换为 Firestore Timestamp
+        time: bookingDetails.time
+      },
+      timestamp: Timestamp.now()
     })
 
     // 发送邮件

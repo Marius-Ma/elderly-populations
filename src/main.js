@@ -5,7 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import router from './router'
 import store from '@/store/store'
-
+import PrimeVue from 'primevue/config'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import Button from 'primevue/button'
+import 'primevue/resources/themes/saga-blue/theme.css'
+import 'primevue/resources/primevue.min.css' // Core CSS
+import 'primeicons/primeicons.css' // Icons CSS
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 // TODO: Add SDKs for Firebase products that you want to use
@@ -37,4 +43,8 @@ onAuthStateChanged(auth, (user) => {
 const app = createApp(App)
 app.use(router)
 app.use(store)
+app.use(PrimeVue)
+app.component('DataTable', DataTable)
+app.component('Column', Column)
+app.component('Button', Button)
 app.mount('#app')
