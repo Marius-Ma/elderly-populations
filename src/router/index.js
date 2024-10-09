@@ -9,6 +9,12 @@ import CommunitySupportView from '/src/views/CommunitySupportView.vue'
 import HaircutSupportView from '@/views/HaircutSupportView.vue'
 import ManageBookingView from '@/views/ManageBookingView.vue'
 import ManageUsersView from '@/views/ManageUsersView.vue'
+import GetInvolvedView from '@/views/GetInvolvedView.vue'
+import GroceryShoppingView from '@/views/GroceryShoppingView.vue'
+import BookClubView from '@/views/BookClubView.vue'
+import BakerClassView from '@/views/BakerClassVIew.vue'
+import MedicalAssistanceView from '@/views/MedicalAssistanceView.vue'
+import EmergencyContactView from '@/views/EmergencyContactView.vue'
 
 const routes = [
   {
@@ -25,6 +31,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: RegisterView
+  },
+  {
+    path: '/get-involved',
+    name: 'GetInvolved',
+    component: GetInvolvedView
   },
   {
     path: '/user/profile',
@@ -60,6 +71,31 @@ const routes = [
     path: '/community-support/haircut',
     name: 'HaircutSupport',
     component: HaircutSupportView
+  },
+  {
+    path: '/community-support/grocery',
+    name: 'GroceryShopping',
+    component: GroceryShoppingView
+  },
+  {
+    path: '/activities/bookclub',
+    name: 'BookClub',
+    component: BookClubView
+  },
+  {
+    path: '/activities/baker',
+    name: 'BakerClass',
+    component: BakerClassView
+  },
+  {
+    path: '/emergency/medical',
+    name: 'MedicalAssistance',
+    component: MedicalAssistanceView
+  },
+  {
+    path: '/emergency/emergency-contact',
+    name: 'EmergencyContact',
+    component: EmergencyContactView
   }
 ]
 

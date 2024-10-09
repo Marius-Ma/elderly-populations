@@ -128,9 +128,13 @@ const sendBulkEmail = async () => {
   }
 
   try {
-    const response = await axios.post('http://localhost:3000/send-bulk-email', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
+    const response = await axios.post(
+      'https://elderly-populations.pages.dev/send-bulk-email',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }
+    )
     if (response.status === 200) {
       alert('Bulk email sent successfully!')
     } else {

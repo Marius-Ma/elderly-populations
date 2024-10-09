@@ -1,17 +1,18 @@
 <template>
   <div>
     <Navigator />
-    <div class="grocery-support">
+    <div class="baker-class">
       <div class="box">
-        <h1>Grocery Shopping Assistance</h1>
+        <h1>Baker Class for Seniors</h1>
         <p>
-          At SilverWell, we offer personalized grocery shopping services for seniors. Whether it's
-          picking up fresh produce or assisting with weekly shopping, our dedicated team ensures
-          that groceries are delivered right to your door. We take the hassle out of grocery
-          shopping, providing convenience and care with every delivery.
+          Unleash your inner chef with our weekly baker class, tailored specifically for seniors.
+          Whether you're a seasoned baker or just starting, our classes offer a fun and interactive
+          way to learn new recipes, master techniques, and enjoy the delicious creations you make.
+          Join us for a delightful culinary experience where community, creativity, and great food
+          come together.
         </p>
       </div>
-      <RatingComponent activityId="grocery" />
+      <RatingComponent activityId="baker" />
     </div>
     <Footer />
   </div>
@@ -24,7 +25,7 @@ import RatingComponent from '@/components/RatingComponent.vue'
 </script>
 
 <style scoped>
-.grocery-support {
+.baker-class {
   background-color: #fef8f5;
   padding: 30px;
   border-radius: 10px;

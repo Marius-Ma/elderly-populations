@@ -33,7 +33,7 @@ exports.getUsers = onRequest(async (req, res) => {
   cors(req, res, async () => {
     const usersRef = admin.firestore().collection('users')
     try {
-      const snapshot = await usersRef.where('role', '==', 'user').get() // 过滤掉 admin
+      const snapshot = await usersRef.where('role', '==', 'user').get()
       const users = []
       snapshot.forEach((doc) => {
         users.push({ id: doc.id, ...doc.data() })
@@ -47,7 +47,7 @@ exports.getUsers = onRequest(async (req, res) => {
 
 exports.deleteUser = onRequest(async (req, res) => {
   cors(req, res, async () => {
-    const userId = req.body.userId // 从请求体中获取 userId
+    const userId = req.body.userId
     try {
       await admin.firestore().collection('users').doc(userId).delete()
       res.status(200).send('User deleted successfully')

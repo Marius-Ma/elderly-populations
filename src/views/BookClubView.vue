@@ -1,17 +1,18 @@
 <template>
   <div>
     <Navigator />
-    <div class="grocery-support">
+    <div class="book-club">
       <div class="box">
-        <h1>Grocery Shopping Assistance</h1>
+        <h1>Book Club for Seniors</h1>
         <p>
-          At SilverWell, we offer personalized grocery shopping services for seniors. Whether it's
-          picking up fresh produce or assisting with weekly shopping, our dedicated team ensures
-          that groceries are delivered right to your door. We take the hassle out of grocery
-          shopping, providing convenience and care with every delivery.
+          At SilverWell, our weekly book club offers seniors a wonderful opportunity to gather,
+          read, and discuss books in a relaxed and friendly environment. Whether you're a book lover
+          or looking for a social group to join, our book club brings people together to share
+          stories, ideas, and friendship. Come and enjoy good company while diving into great
+          literature!
         </p>
       </div>
-      <RatingComponent activityId="grocery" />
+      <RatingComponent activityId="bookClub" />
     </div>
     <Footer />
   </div>
@@ -24,7 +25,7 @@ import RatingComponent from '@/components/RatingComponent.vue'
 </script>
 
 <style scoped>
-.grocery-support {
+.book-club {
   background-color: #fef8f5;
   padding: 30px;
   border-radius: 10px;

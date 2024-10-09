@@ -1,17 +1,17 @@
 <template>
   <div>
     <Navigator />
-    <div class="grocery-support">
+    <div class="emergency-contact">
       <div class="box">
-        <h1>Grocery Shopping Assistance</h1>
+        <h1>Emergency Contact</h1>
         <p>
-          At SilverWell, we offer personalized grocery shopping services for seniors. Whether it's
-          picking up fresh produce or assisting with weekly shopping, our dedicated team ensures
-          that groceries are delivered right to your door. We take the hassle out of grocery
-          shopping, providing convenience and care with every delivery.
+          Our 24/7 emergency contact service offers immediate assistance in urgent situations.
+          Whether it's a medical emergency or any critical need, we ensure quick and reliable
+          responses to keep you safe. Always feel secure knowing that help is just a call away, any
+          time, any day.
         </p>
       </div>
-      <RatingComponent activityId="grocery" />
+      <RatingComponent activityId="emergency" />
     </div>
     <Footer />
   </div>
@@ -24,7 +24,7 @@ import RatingComponent from '@/components/RatingComponent.vue'
 </script>
 
 <style scoped>
-.grocery-support {
+.emergency-contact {
   background-color: #fef8f5;
   padding: 30px;
   border-radius: 10px;
@@ -47,13 +47,6 @@ p {
   text-align: center;
 }
 
-.stars {
-  font-size: 2.5rem;
-  color: #ccc;
-  display: inline-block;
-  margin-bottom: 15px;
-}
-
 .box {
   background-color: #fef8f5;
   padding: 20px;
@@ -61,16 +54,5 @@ p {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   text-align: center;
-}
-
-.box h2 {
-  font-size: 2rem;
-  color: #8c5543;
-  margin-bottom: 10px;
-}
-
-.box p {
-  font-size: 1rem;
-  color: #333;
 }
 </style>

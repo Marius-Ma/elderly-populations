@@ -23,7 +23,7 @@
             >
               Book
             </button>
-            <router-link to="/support/grocery" class="btn">Learn More</router-link>
+            <router-link to="/community-support/grocery" class="btn">Learn More</router-link>
           </div>
         </div>
         <div class="support-item">
@@ -102,7 +102,7 @@
               Call
             </button>
 
-            <router-link to="/support/medical" class="btn">Learn More</router-link>
+            <router-link to="/emergency/medical" class="btn">Learn More</router-link>
           </div>
         </div>
         <div class="support-item">
@@ -119,7 +119,7 @@
               Call
             </button>
 
-            <router-link to="/support/emergency-contact" class="btn">Learn More</router-link>
+            <router-link to="/emergency/emergency-contact" class="btn">Learn More</router-link>
           </div>
         </div>
       </div>
@@ -203,7 +203,7 @@ const submitBooking = async (bookingDetails) => {
     })
 
     // 发送邮件
-    const response = await fetch('http://localhost:3000/send-email', {
+    const response = await fetch('https://elderly-populations.pages.dev/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

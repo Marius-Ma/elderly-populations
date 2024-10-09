@@ -41,9 +41,6 @@
             <router-link v-if="isAdminUser" to="/admin/settings" class="dropdown-item">
               Settings
             </router-link>
-            <router-link v-if="isAdminUser" to="/admin/data" class="dropdown-item">
-              Data Overview
-            </router-link>
             <router-link v-if="!isAdminUser" to="/user/profile" class="dropdown-item">
               User Dashboard
             </router-link>
