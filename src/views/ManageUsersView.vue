@@ -161,24 +161,23 @@ const sendBulkEmail = async () => {
     return
   }
 
-  const recipientsEmails = selectedRecipients.value.map((user) => user.email) // Get email addresses
-  const formData = new FormData()
-  formData.append('subject', emailSubject.value)
-  formData.append('message', emailMessage.value)
-  formData.append('recipients', JSON.stringify(recipientsEmails))
+  const recipientsEmails = selectedRecipients.value.map((user) => user.email)
 
-  if (attachment.value) {
-    formData.append('attachment', attachment.value)
+  const payload = {
+    recipients: recipientsEmails,
+    subject: emailSubject.value,
+    message: emailMessage.value
   }
 
   try {
     const response = await axios.post(
       'https://send-email-worker.my429542819.workers.dev/send-bulk-email',
-      formData,
+      payload, // 直接发送 JSON 对象作为请求体
       {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'application/json' }
       }
     )
+
     if (response.status === 200) {
       alert('Bulk email sent successfully!')
     } else {
