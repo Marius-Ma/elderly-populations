@@ -54,7 +54,7 @@ const sendBulkEmails = async (recipients, emailDetails, attachment = null) => {
 
   recipients.forEach((recipient) => {
     const userMsg = {
-      to: recipient, // 使用正确的收件人 email
+      to: recipient,
       from: '429542819@qq.com', // 你的已验证邮箱
       subject: emailDetails.subject,
       text: emailDetails.message,

@@ -7,7 +7,13 @@ const { sendBookingEmail, sendBulkEmails } = require('./sendEmail')
 const app = express()
 const PORT = process.env.PORT || 3000
 
-app.use(cors())
+app.use(
+  cors({
+    origin: 'https://elderly-populations.pages.dev',
+    methods: ['GET', 'POST']
+  })
+)
+
 app.use(express.json())
 
 // 设置 multer 用于文件上传

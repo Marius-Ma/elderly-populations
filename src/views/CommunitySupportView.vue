@@ -202,7 +202,7 @@ const submitBooking = async (bookingDetails) => {
     })
 
     // 发送邮件
-    const response = await fetch('https://elderly-populations.pages.dev/send-email', {
+    const response = await fetch('https://send-email-worker.my429542819.workers.dev/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

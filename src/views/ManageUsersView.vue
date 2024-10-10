@@ -173,7 +173,7 @@ const sendBulkEmail = async () => {
 
   try {
     const response = await axios.post(
-      'https://elderly-populations.pages.dev/send-bulk-email',
+      'https://send-email-worker.my429542819.workers.dev/send-bulk-email',
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' }
