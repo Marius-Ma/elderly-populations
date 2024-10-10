@@ -3,7 +3,14 @@
   <div class="manage-booking container">
     <h1>Manage Bookings</h1>
     <div class="text-end pb-4">
-      <Button icon="pi pi-external-link" label="Export" @click="exportCSV" />
+      <Dropdown
+        v-model="selectedFormat"
+        :options="exportFormats"
+        placeholder="Select format"
+        @change="handleFormatChange"
+      />
+
+      <Button icon="pi pi-external-link" label="Export" @click="handleExport" />
     </div>
     <DataTable
       v-if="bookings.length"
@@ -31,13 +38,45 @@ import { ref, onMounted } from 'vue'
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
 import axios from 'axios'
-import { formatDate } from '@/utils/dateUtils' // 导入日期工具函数
-
+import { formatDate } from '@/utils/dateUtils'
+import { jsPDF } from 'jspdf'
+import 'jspdf-autotable'
 const bookings = ref([])
-const dt = ref() // DataTable reference
+const dt = ref()
+const selectedFormat = ref(null)
+
+const exportFormats = ref([
+  { label: 'CSV', value: 'csv' },
+  { label: 'PDF', value: 'pdf' }
+])
 
 const exportCSV = () => {
   dt.value.exportCSV() // Export the data table to CSV
+}
+const exportPDF = () => {
+  const doc = new jsPDF()
+  let rows = users.value.map((user) => [user.username, user.email, user.role])
+  doc.autoTable({
+    head: [['Username', 'Email', 'Role']],
+    body: rows
+  })
+  doc.save('users.pdf')
+}
+
+const handleExport = () => {
+  console.log('Export function triggered')
+  console.log('Exporting as:', selectedFormat.value)
+
+  if (!selectedFormat.value) {
+    alert('Please select an export format.')
+    return
+  }
+
+  if (selectedFormat.value === 'csv') {
+    exportCSV()
+  } else if (selectedFormat.value === 'pdf') {
+    exportPDF()
+  }
 }
 
 const fetchBookings = async () => {
@@ -46,7 +85,6 @@ const fetchBookings = async () => {
     console.log('API Response:', response.data)
 
     bookings.value = response.data.map((booking) => {
-      // 使用 formatDate 函数格式化从 Firestore 读取的日期
       const formattedDate = formatDate(booking.bookingDetails.date)
       const formattedTimestamp = formatDate(booking.timestamp)
 

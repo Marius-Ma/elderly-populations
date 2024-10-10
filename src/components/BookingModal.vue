@@ -4,7 +4,11 @@
       <h2>Book {{ serviceName }}</h2>
       <div class="form-group">
         <label for="date">Select a date:</label>
-        <Datepicker v-model="selectedDate" :input-class="'datepicker-input'" />
+        <Datepicker
+          v-model="selectedDate"
+          :input-class="'datepicker-input'"
+          :min-date="new Date()"
+        />
       </div>
       <div class="form-group">
         <label for="time">Select a time:</label>
@@ -43,7 +47,6 @@ const closeModal = () => {
 
 const submitBooking = () => {
   if (selectedDate.value && selectedTime.value) {
-    // 确保 selectedDate.value 是有效的 JavaScript 日期对象
     const validDate =
       selectedDate.value instanceof Date && !isNaN(selectedDate.value.getTime())
         ? selectedDate.value
@@ -54,18 +57,16 @@ const submitBooking = () => {
       return
     }
 
-    // 将日期直接传递为 JavaScript 日期对象
     const bookingDetails = {
       service: props.serviceName,
-      date: validDate, // 不要将日期转换为 Timestamp，保持为 Date 对象
+      date: validDate,
       time: selectedTime.value,
-      createdAt: new Date() // 新增字段，存储创建时间
+      createdAt: new Date()
     }
 
     console.log('Selected date value:', selectedDate.value, 'Type:', typeof selectedDate.value)
     console.log('Booking details:', bookingDetails)
 
-    // Emit 提交事件
     emit('submit', bookingDetails)
     closeModal()
   } else {

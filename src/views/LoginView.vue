@@ -34,10 +34,10 @@
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
               <div v-if="errors.login" class="text-danger">{{ errors.login }}</div>
             </div>
-            <button type="submit" class="btn btn-outline-dark btn-block mb-3 mt-4">Log in</button>
+            <button type="submit" class="btn-outline-dark btn-block mb-3 mt-4">Log in</button>
           </form>
           <div class="social-login d-flex justify-content-center">
-            <button class="btn btn-outline-secondary google-login" @click="loginWithGoogle">
+            <button class="btn-outline-dark google-login" @click="loginWithGoogle">
               <img src="/icons/google-icon.png" alt="Google" class="mr-2" /> Google
             </button>
           </div>
@@ -227,6 +227,11 @@ const loginWithGoogle = async () => {
   padding: 12px 20px;
   width: 100%;
   margin-top: 15px;
+  background-color: rgb(255, 255, 255);
+  color: black;
+  font-weight: bold;
+  font-size: 18px;
+  border: none;
 }
 
 .btn-outline-dark:hover {
@@ -235,16 +240,16 @@ const loginWithGoogle = async () => {
 }
 
 .google-login {
-  background-color: #080001;
-  color: #ffffff;
-  border: 1px solid #afafaf;
-  box-shadow: 0 2px 5px rgba(52, 49, 49, 0.1);
+  border-radius: 10px;
+  border: none;
   width: 280px;
   margin-top: 20px;
   padding: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: bold;
+  font-size: 17px;
 }
 
 .google-login img {
@@ -268,6 +273,12 @@ const loginWithGoogle = async () => {
   background-color: #ffffff;
   border-radius: 10px;
   padding: 10px 20px;
+  color: black;
+  text-decoration: none;
+}
+
+.create-account-button:hover {
+  background-color: #ffd0d0;
 }
 
 .not-member-text {
@@ -301,7 +312,7 @@ const loginWithGoogle = async () => {
   position: absolute;
   right: 0;
   top: 100%;
-  color: #666;
+  color: #383838;
   font-size: 0.9rem;
   cursor: pointer; /* Add this for better UX */
   text-decoration: underline; /* Makes it look more like a link */
@@ -313,11 +324,11 @@ const loginWithGoogle = async () => {
   }
 
   .vertical-line {
-    display: none; /* 小屏幕时隐藏竖线 */
+    display: none;
   }
 
   .not-member-text {
-    margin-top: 20px; /* 增加一些空间 */
+    margin-top: 20px;
     text-align: center;
   }
 
@@ -333,7 +344,7 @@ const loginWithGoogle = async () => {
 
 @media (max-width: 768px) {
   .vertical-line {
-    display: none; /* 小屏幕时隐藏竖线 */
+    display: none;
   }
 
   .not-member-text {
