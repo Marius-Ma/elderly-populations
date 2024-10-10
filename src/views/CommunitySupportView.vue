@@ -174,12 +174,15 @@ const closeBookingModal = () => {
 
 const submitBooking = async (bookingDetails) => {
   const auth = getAuth()
-  const userId = auth.currentUser?.uid
+  const user = auth.currentUser
 
-  if (!userId) {
+  if (!user) {
     alert('User not logged in. Please log in first.')
     return
   }
+  const userId = user.uid
+  const userEmail = user.email
+  const userName = user.displayName || 'User'
 
   try {
     const validDate = dayjs(bookingDetails.date).isValid()
@@ -195,7 +198,7 @@ const submitBooking = async (bookingDetails) => {
       userEmail: auth.currentUser.email,
       serviceName: selectedService.value,
       bookingDetails: {
-        date: Timestamp.fromDate(validDate), // 使用有效的 JavaScript 日期对象转换为 Firestore Timestamp
+        date: Timestamp.fromDate(validDate),
         time: bookingDetails.time
       },
       timestamp: Timestamp.now()
@@ -208,7 +211,8 @@ const submitBooking = async (bookingDetails) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        userId: userId,
+        email: userEmail,
+        name: userName,
         bookingDetails: bookingDetails
       })
     })

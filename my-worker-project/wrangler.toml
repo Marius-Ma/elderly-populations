@@ -116,3 +116,7 @@ enabled = true
 # binding = "MY_INDEX"
 # index_name = "my-index"
 
+# wrangler.toml (wrangler v3.78.6^)
+[observability]
+enabled = true
+
