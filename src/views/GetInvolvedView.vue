@@ -88,7 +88,6 @@ const charityEvents = [
   { name: 'Charity Event 2', coordinates: [144.9707, -37.8201] }
 ]
 
-// 添加标记的函数
 const addMarkers = (locations, color) => {
   locations.forEach((location) => {
     const marker = new mapboxgl.Marker({ color })
@@ -181,7 +180,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scope>
 .get-involved {
   padding: 40px 20px;
   background-color: var(--bg-light);
@@ -286,5 +285,17 @@ onMounted(() => {
 .btn[disabled] {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.map-controls {
+  display: flex;
+  align-items: center; /* 确保它们在垂直方向居中 */
+  gap: 70px; /* 控件之间的间距 */
+  margin-bottom: 20px;
+}
+
+#geocoder input {
+  width: 100%; /* 让输入框在容器中占满宽度 */
+  padding-left: 30px; /* 调整放大镜和文本之间的距离 */
 }
 </style>
