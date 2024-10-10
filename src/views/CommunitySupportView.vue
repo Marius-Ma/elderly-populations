@@ -158,7 +158,6 @@ const selectedService = ref('')
 // Firebase Firestore
 const db = getFirestore()
 
-// 打开预定模态框
 const openBookingModal = (serviceName) => {
   if (!canBook.value) {
     alert('You must be logged in as a user to book services.')

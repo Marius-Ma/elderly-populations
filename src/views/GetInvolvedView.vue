@@ -73,7 +73,6 @@ mapboxgl.accessToken =
 const map = ref(null)
 let markers = []
 
-// 定义不同类别的位置数据
 const supportCenters = [
   { name: 'Support Center 1', coordinates: [144.9779, -37.8181] },
   { name: 'Support Center 2', coordinates: [144.9513, -37.8073] }

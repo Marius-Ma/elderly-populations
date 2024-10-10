@@ -1,11 +1,11 @@
 <template>
   <div>
     <Navigator />
-    <div class="container mt-5">
+    <div class="container mt-5 form-container">
       <div class="row">
         <div class="col-md-8 offset-md-2">
-          <h1 class="text-center">Register</h1>
-          <form @submit.prevent="submitForm">
+          <h1 class="text-center register-heading">Register</h1>
+          <form @submit.prevent="submitForm" class="register-form">
             <div class="mb-3">
               <label for="username" class="form-label">Username</label>
               <input
@@ -84,8 +84,8 @@
             <div v-if="errorMessage" class="text-danger mb-3">{{ errorMessage }}</div>
 
             <div class="text-center">
-              <button type="submit" class="btn btn-primary me-2">Register</button>
-              <button type="button" class="btn btn-secondary" @click="clearForm">Clear</button>
+              <button type="submit" class="btn btn-register me-2">Register</button>
+              <button type="button" class="btn btn-clear" @click="clearForm">Clear</button>
             </div>
           </form>
         </div>
@@ -250,20 +250,68 @@ const clearForm = () => {
 </script>
 
 <style scoped>
-.container {
-  max-width: 600px;
+/* Add a container for the form with shadow effect */
+.form-container {
+  max-width: 700px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px;
+  background-color: #efefef;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-h1 {
-  font-size: 2rem;
+/* Header */
+.register-heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #8c5543;
+}
+
+/* Input field styling */
+.form-control {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
   margin-bottom: 20px;
 }
 
-.btn {
+/* Button styling */
+.btn-register {
+  background-color: #8c5543;
+  color: white;
   width: 100%;
-  padding: 10px;
-  margin-top: 15px;
+  padding: 12px;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-register:hover {
+  background-color: #7a4a38;
+}
+
+.btn-clear {
+  background-color: #555;
+  color: white;
+  width: 100%;
+  padding: 12px;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-clear:hover {
+  background-color: #444;
+}
+
+.form-control {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
 }
 </style>

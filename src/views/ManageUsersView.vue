@@ -2,13 +2,17 @@
   <Navigator />
   <div class="manage-users container">
     <h1>Manage Users</h1>
-
-    <!-- Export Button -->
     <div class="text-end pb-4">
-      <Button icon="pi pi-external-link" label="Export" @click="exportCSV" />
+      <Dropdown
+        v-model="selectedFormat"
+        :options="exportFormats"
+        placeholder="Select format"
+        @change="handleFormatChange"
+      />
+
+      <Button icon="pi pi-external-link" label="Export" @click="handleExport" />
     </div>
 
-    <!-- DataTable for Users -->
     <DataTable
       v-if="users.length"
       :value="users"
@@ -26,7 +30,6 @@
       <Column field="role" header="Role" sortable />
     </DataTable>
 
-    <!-- Bulk Delete Button -->
     <div class="text-end pb-4">
       <Button
         icon="pi pi-trash"
@@ -79,6 +82,8 @@ import Footer from '@/components/Footer.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import MultiSelect from 'primevue/multiselect'
+import { jsPDF } from 'jspdf'
+import 'jspdf-autotable'
 
 // Variables to store data
 const users = ref([])
@@ -88,6 +93,12 @@ const emailMessage = ref('')
 const attachment = ref(null)
 const dt = ref()
 const recipientOptions = ref([])
+const selectedFormat = ref(null)
+
+const exportFormats = ref([
+  { label: 'CSV', value: 'csv' },
+  { label: 'PDF', value: 'pdf' }
+])
 
 // Fetch users from Cloud Function
 const fetchUsers = async () => {
@@ -103,6 +114,39 @@ const fetchUsers = async () => {
 // Export DataTable to CSV
 const exportCSV = () => {
   dt.value.exportCSV()
+}
+
+const exportPDF = () => {
+  const doc = new jsPDF()
+  let rows = users.value.map((user) => [user.username, user.email, user.role])
+  doc.autoTable({
+    head: [['Username', 'Email', 'Role']],
+    body: rows
+  })
+  doc.save('users.pdf')
+}
+
+console.log('Selected format:', selectedFormat.value)
+const handleFormatChange = (event) => {
+  // Assuming the structure of the event as shown in your logs
+  selectedFormat.value = event.value.value
+  console.log('New selected format:', selectedFormat.value)
+}
+
+const handleExport = () => {
+  console.log('Export function triggered')
+  console.log('Exporting as:', selectedFormat.value) // To check what format is being used at export time
+
+  if (!selectedFormat.value) {
+    alert('Please select an export format.')
+    return
+  }
+
+  if (selectedFormat.value === 'csv') {
+    exportCSV()
+  } else if (selectedFormat.value === 'pdf') {
+    exportPDF()
+  }
 }
 
 // Handle file upload
@@ -183,6 +227,10 @@ onMounted(() => {
 .email-form {
   margin-top: 20px;
   text-align: left;
+  background-color: #f5e0d3;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .email-form .form-group {
@@ -194,6 +242,7 @@ onMounted(() => {
   width: 100%;
   padding: 10px;
   border-radius: 5px;
+  border: 1px solid #d1a3a4;
 }
 
 .btn {

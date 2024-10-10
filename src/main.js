@@ -14,6 +14,9 @@ import 'primevue/resources/primevue.min.css' // Core CSS
 import 'primeicons/primeicons.css' // Icons CSS
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
+import Dropdown from 'primevue/dropdown'
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -28,9 +31,9 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-initializeApp(firebaseConfig)
-
-const auth = getAuth()
+const firebaseApp = initializeApp(firebaseConfig)
+const db = getFirestore(firebaseApp)
+const auth = getAuth(firebaseApp)
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -47,4 +50,6 @@ app.use(PrimeVue)
 app.component('DataTable', DataTable)
 app.component('Column', Column)
 app.component('Button', Button)
+app.component('Dropdown', Dropdown)
 app.mount('#app')
+export { db }

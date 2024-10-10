@@ -12,17 +12,6 @@
 
         <div class="dropdown" @mouseenter="openSupportDropdown" @mouseleave="closeSupportDropdown">
           <router-link to="/community-support" class="nav-link">Community Support</router-link>
-          <div v-if="supportDropdownOpen" class="dropdown-menu">
-            <router-link to="/community-support/daily-support" class="dropdown-item">
-              Daily Support
-            </router-link>
-            <router-link to="/community-support/community-activities" class="dropdown-item">
-              Community Activities
-            </router-link>
-            <router-link to="/community-support/emergency-support" class="dropdown-item">
-              Emergency Support
-            </router-link>
-          </div>
         </div>
 
         <router-link to="/get-involved" class="nav-link">Get Involved</router-link>
@@ -35,16 +24,16 @@
             <router-link v-if="isAdminUser" to="/admin/profile" class="dropdown-item">
               Admin Dashboard
             </router-link>
-            <router-link v-if="isAdminUser" to="/admin/users" class="dropdown-item">
+            <router-link v-if="isAdminUser" to="/admin/manage-users" class="dropdown-item">
               Manage Users
             </router-link>
-            <router-link v-if="isAdminUser" to="/admin/settings" class="dropdown-item">
+            <router-link v-if="isAdminUser" to="/settings" class="dropdown-item">
               Settings
             </router-link>
             <router-link v-if="!isAdminUser" to="/user/profile" class="dropdown-item">
               User Dashboard
             </router-link>
-            <router-link v-if="!isAdminUser" to="/user/settings" class="dropdown-item">
+            <router-link v-if="!isAdminUser" to="/settings" class="dropdown-item">
               User Settings</router-link
             >
             <div class="dropdown-divider"></div>
@@ -75,7 +64,7 @@
         >Manage Booking</router-link
       >
       <router-link
-        to="/admin/settings"
+        to="/settings"
         class="admin-nav-link"
         :class="{ active: isActive('/admin/settings') }"
         >Settings</router-link
@@ -92,7 +81,7 @@
         >Profile</router-link
       >
       <router-link
-        to="/user/settings"
+        to="/settings"
         class="user-nav-link"
         :class="{ active: isActive('/user/settings') }"
         >Settings</router-link
@@ -173,13 +162,12 @@ const decreaseFontSize = () => {
 .navigator {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   background-color: #ddaa99;
   padding: 10px 20px;
-  position: sticky; /* or position: fixed */
+  position: sticky;
   top: 0;
-  width: 100%; /* Make sure it stretches across the full viewport */
-  z-index: 1000; /* Ensure it's always on top */
+  width: 100%;
+  z-index: 1000;
 }
 
 .top-nav {
@@ -205,6 +193,8 @@ const decreaseFontSize = () => {
   display: flex;
   align-items: center;
   gap: 20px;
+  overflow: hidden; /* 防止换行并允许超出部分隐藏 */
+  white-space: nowrap; /* 确保所有链接都在一行内 */
 }
 
 .nav-link {
@@ -254,7 +244,6 @@ const decreaseFontSize = () => {
 
 .logout {
   background-color: #ff4d4d !important;
-  /* color: #ff4d4d !important; */
 }
 
 .login-icon {
@@ -269,6 +258,7 @@ const decreaseFontSize = () => {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+  flex-wrap: wrap; /* Ensure that links wrap on smaller screens */
 }
 
 .user-nav-link,
@@ -293,6 +283,12 @@ const decreaseFontSize = () => {
   color: #fff;
 }
 
+.accessibility-controls {
+  margin-left: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .accessibility-controls button {
   background-color: #333;
   color: #fff;
@@ -305,5 +301,27 @@ const decreaseFontSize = () => {
 
 .accessibility-controls button:hover {
   background-color: #555;
+}
+
+@media (max-width: 768px) {
+  .accessibility-controls {
+    justify-content: center; /* 在小屏幕上让按钮居中 */
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .top-nav {
+    justify-content: space-between;
+  }
+
+  .nav-link,
+  .nav-icon {
+    min-width: 80px;
+  }
 }
 </style>

@@ -5,6 +5,7 @@ import RegisterView from '/src/views/RegisterView.vue'
 import UserProfileView from '/src/views/UserProfileView.vue'
 import AdminProfileView from '/src/views/AdminProfileView.vue'
 import AboutUsView from '/src/views/AboutUsView.vue'
+import HealthResourcesView from '@/views/HealthResourcesView.vue'
 import CommunitySupportView from '/src/views/CommunitySupportView.vue'
 import HaircutSupportView from '@/views/HaircutSupportView.vue'
 import ManageBookingView from '@/views/ManageBookingView.vue'
@@ -15,6 +16,7 @@ import BookClubView from '@/views/BookClubView.vue'
 import BakerClassView from '@/views/BakerClassVIew.vue'
 import MedicalAssistanceView from '@/views/MedicalAssistanceView.vue'
 import EmergencyContactView from '@/views/EmergencyContactView.vue'
+import SettingsView from '@/views/SettingsView.vue'
 
 const routes = [
   {
@@ -58,9 +60,19 @@ const routes = [
     component: ManageUsersView
   },
   {
+    path: '/settings',
+    name: 'Settings',
+    component: SettingsView
+  },
+  {
     path: '/about',
     name: 'AboutUs',
     component: AboutUsView
+  },
+  {
+    path: '/health-resources',
+    name: 'HealthResources',
+    component: HealthResourcesView
   },
   {
     path: '/community-support',

@@ -28,18 +28,17 @@
                 v-model="formData.password"
                 @blur="validatePassword"
               />
-              <small class="form-text forgot-password">Forgot password?</small>
+              <small class="form-text forgot-password" @click="resetPassword"
+                >Forgot password?</small
+              >
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
               <div v-if="errors.login" class="text-danger">{{ errors.login }}</div>
             </div>
             <button type="submit" class="btn btn-outline-dark btn-block mb-3 mt-4">Log in</button>
           </form>
-          <div class="social-login d-flex justify-content-between">
-            <button class="btn btn-outline-secondary google-login mr-2">
+          <div class="social-login d-flex justify-content-center">
+            <button class="btn btn-outline-secondary google-login" @click="loginWithGoogle">
               <img src="/icons/google-icon.png" alt="Google" class="mr-2" /> Google
-            </button>
-            <button class="btn btn-outline-secondary facebook-login">
-              <img src="/icons/facebook-icon.png" alt="Facebook" class="mr-2" /> Facebook
             </button>
           </div>
         </div>
@@ -69,11 +68,18 @@
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
 import { ref } from 'vue'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  sendPasswordResetEmail
+} from 'firebase/auth'
 import { getFirestore, doc, getDoc } from 'firebase/firestore'
 import { useRouter } from 'vue-router'
 
 const auth = getAuth()
+const provider = new GoogleAuthProvider()
 const db = getFirestore()
 const router = useRouter()
 
@@ -104,6 +110,21 @@ const validatePassword = () => {
     errors.value.password = 'Password is required.'
   } else {
     errors.value.password = null
+  }
+}
+
+const resetPassword = async () => {
+  if (!formData.value.email) {
+    errors.value.email = 'Please enter your email to reset your password.'
+    return
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, formData.value.email)
+    alert('Password reset email sent! Check your inbox.')
+  } catch (error) {
+    console.error('Error sending password reset email:', error)
+    errors.value.email = 'Failed to send password reset email. Please try again.'
   }
 }
 
@@ -139,6 +160,27 @@ const submitForm = async () => {
       // Log the entire error to see what Firebase is returning
       errors.value.login = 'Username or password is incorrect. Please try again.'
     }
+  }
+}
+const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider)
+    const user = result.user
+    console.log('User logged in with Google:', user)
+    const userDoc = await getDoc(doc(db, 'users', user.uid))
+
+    if (!userDoc.exists()) {
+      await setDoc(doc(db, 'users', user.uid), {
+        username: user.displayName || 'Anonymous',
+        email: user.email,
+        photoURL: user.photoURL || null,
+        role: 'user'
+      })
+    }
+    router.push('/user/profile')
+  } catch (error) {
+    console.error('Error logging in with Google:', error)
+    errors.value.login = 'Failed to log in with Google. Please try again.'
   }
 }
 </script>
@@ -182,29 +224,33 @@ const submitForm = async () => {
 .btn-light,
 .btn-outline-dark {
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 12px 20px;
   width: 100%;
+  margin-top: 15px;
 }
 
 .btn-outline-dark:hover {
   background-color: #000;
-  color: #fff;
+  color: hsl(0, 0%, 100%);
 }
 
-.google-login,
-.facebook-login {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 180px;
-  margin-top: 10px;
+.google-login {
+  background-color: #080001;
+  color: #ffffff;
+  border: 1px solid #afafaf;
+  box-shadow: 0 2px 5px rgba(52, 49, 49, 0.1);
+  width: 280px;
+  margin-top: 20px;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.google-login img,
-.facebook-login img {
-  width: 20px;
+.google-login img {
+  width: 28px;
   height: auto;
+  margin-right: 7px;
 }
 
 .create-account-box {
@@ -225,16 +271,19 @@ const submitForm = async () => {
 }
 
 .not-member-text {
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  display: inline-block;
+  text-align: center;
   font-weight: bold;
-  margin: 15px 0;
+  margin: 8px 2px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .vertical-line {
   border-left: 2px solid rgba(255, 255, 255, 0.7);
-  height: 50px;
-  margin: auto;
+  height: 160px; /* Increased the height slightly */
+  margin: auto 50px; /* Adjusted margin for spacing around the text */
 }
 
 .social-login {
@@ -245,6 +294,75 @@ const submitForm = async () => {
 
 .form-group {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* Increased margin between inputs */
+}
+
+.forgot-password {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  color: #666;
+  font-size: 0.9rem;
+  cursor: pointer; /* Add this for better UX */
+  text-decoration: underline; /* Makes it look more like a link */
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column; /* 将横向布局改为纵向堆叠 */
+  }
+
+  .vertical-line {
+    display: none; /* 小屏幕时隐藏竖线 */
+  }
+
+  .not-member-text {
+    margin-top: 20px; /* 增加一些空间 */
+    text-align: center;
+  }
+
+  .col-12,
+  .col-md-5,
+  .col-md-1,
+  .col-lg-4,
+  .col-xl-3 {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .vertical-line {
+    display: none; /* 小屏幕时隐藏竖线 */
+  }
+
+  .not-member-text {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .create-account-box {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn {
+    width: 100%;
+  }
+
+  .google-login {
+    width: 100%;
+  }
 }
 </style>

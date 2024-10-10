@@ -2,11 +2,27 @@
   <footer class="footer">
     <div class="footer-line"></div>
     <div class="d-flex justify-content-between align-items-center">
-      <p class="footer-text mb-0">© copyright | Privacy Policy | +61 3000000000</p>
+      <p class="footer-text mb-0">
+        <router-link to="/" class="footer-link">© copyright</router-link> |
+        <a
+          href="https://www.oaic.gov.au/privacy"
+          class="footer-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Privacy Policy</a
+        >
+        | +61 3000000000
+      </p>
       <div class="social-icons mt-2">
-        <img src="/icons/google-icon.png" alt="Icon1" class="mr-2" />
-        <img src="/icons/facebook-icon.png" alt="Icon2" class="mr-2" />
-        <img src="/icons/insta-icon.png" alt="Icon3" />
+        <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">
+          <img src="/icons/google-icon.png" alt="Google" class="mr-2" />
+        </a>
+        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+          <img src="/icons/facebook-icon.png" alt="Facebook" class="mr-2" />
+        </a>
+        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+          <img src="/icons/insta-icon.png" alt="Instagram" />
+        </a>
       </div>
     </div>
   </footer>
@@ -14,7 +30,7 @@
 
 <style scoped>
 footer {
-  margin-top: auto; /* Pushes the footer to the bottom */
+  margin-top: auto;
   width: 100%;
   background-color: #ddaa99;
   padding-top: 10px;
@@ -31,6 +47,17 @@ footer {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   margin: 0;
+}
+
+.footer-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
 }
 
 .social-icons img {
