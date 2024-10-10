@@ -193,7 +193,7 @@ const decreaseFontSize = () => {
   display: flex;
   align-items: center;
   gap: 20px;
-  overflow: hidden; /* 防止换行并允许超出部分隐藏 */
+  overflow: visible;
   white-space: nowrap; /* 确保所有链接都在一行内 */
 }
 
