@@ -49,9 +49,15 @@ exports.deleteUser = onRequest(async (req, res) => {
   cors(req, res, async () => {
     const userId = req.body.userId
     try {
+      // 删除 Firestore 中的用户数据
       await admin.firestore().collection('users').doc(userId).delete()
-      res.status(200).send('User deleted successfully')
+
+      // 删除 Authentication 中的用户
+      await admin.auth().deleteUser(userId)
+
+      res.status(200).send('User deleted successfully from Firestore and Authentication')
     } catch (error) {
+      console.error('Error deleting user:', error)
       res.status(500).send(error)
     }
   })
