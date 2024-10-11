@@ -103,13 +103,9 @@ const fetchBookings = async () => {
       } else {
         validDate = booking.bookingDetails.date
       }
-
-      // 使用 dayjs 格式化日期
       const formattedDate = dayjs(validDate).isValid()
         ? dayjs(validDate).format('YYYY-MM-DD')
         : 'Invalid Date'
-
-      // 处理时间戳
       let validTimestamp
       if (booking.timestamp && booking.timestamp._seconds) {
         validTimestamp = new Date(booking.timestamp._seconds * 1000)

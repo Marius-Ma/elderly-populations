@@ -42,14 +42,14 @@
         <button @click="showFoodBanks" class="btn">Food Banks</button>
       </div>
 
-      <!-- Geocoder and Directions Controls -->
-      <div class="map-controls">
-        <div id="geocoder" class="geocoder-container"></div>
-        <div id="directions" class="directions-container"></div>
+      <!-- Geocoder, Directions, and Map Container -->
+      <div class="map-directions-container">
+        <div class="left-panel">
+          <div id="geocoder" class="geocoder-container"></div>
+          <div id="directions" class="directions-container"></div>
+        </div>
+        <div id="map" class="map-container"></div>
       </div>
-
-      <!-- Map Container -->
-      <div id="map" class="map-container"></div>
     </section>
 
     <Footer />
@@ -242,13 +242,6 @@ onMounted(() => {
   text-align: center;
 }
 
-.map-controls {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
 .category-controls {
   margin-bottom: 20px;
   display: flex;
@@ -256,12 +249,59 @@ onMounted(() => {
   gap: 15px;
 }
 
-#map {
+.map-directions-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 30%;
+}
+
+/* #geocoder {
   width: 100%;
+  position: relative;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+} */
+
+#geocoder input {
+  width: calc(100% - 20px);
+  padding-left: 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  align-items: center;
+}
+#map {
+  width: 70%;
   height: 500px;
   position: relative;
   z-index: 1;
   margin-bottom: 20px;
+}
+
+#directions {
+  width: 100%;
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.geocoder-container {
+  margin-bottom: 10px;
 }
 
 .btn {
@@ -287,15 +327,13 @@ onMounted(() => {
   cursor: not-allowed;
 }
 
-.map-controls {
-  display: flex;
-  align-items: center; /* 确保它们在垂直方向居中 */
-  gap: 70px; /* 控件之间的间距 */
-  margin-bottom: 20px;
+.mapboxgl-ctrl-geocoder {
+  border-radius: 8px; /* 圆角边框 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 阴影 */
+  width: 100%;
 }
 
-#geocoder input {
-  width: 100%; /* 让输入框在容器中占满宽度 */
-  padding-left: 30px; /* 调整放大镜和文本之间的距离 */
+.mapboxgl-ctrl-geocoder input {
+  border-radius: 12px; /* 输入框也要圆角 */
 }
 </style>
