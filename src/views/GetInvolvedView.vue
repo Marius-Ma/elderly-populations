@@ -48,7 +48,7 @@
           <div id="geocoder" class="geocoder-container"></div>
           <div id="directions" class="directions-container"></div>
         </div>
-        <div id="map" class="map-container"></div>
+        <div v-if="!isInitialized" id="map" class="map-container"></div>
       </div>
     </section>
 
@@ -122,8 +122,11 @@ const showFoodBanks = () => {
   clearAllMarkers()
   addMarkers(foodBanks, 'green')
 }
+let isInitialized = false
 
 onMounted(() => {
+  if (isInitialized) return // 如果已经初始化，则跳过
+
   map.value = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
@@ -132,14 +135,14 @@ onMounted(() => {
     maxBounds: [
       [144.85, -37.85], // Southwest corner
       [145.1, -37.75] // Northeast corner
-    ] // 设置地图的最大边界
+    ]
   })
 
   // 添加导航控制按钮
   map.value.addControl(
     new mapboxgl.NavigationControl({
-      showZoom: true, // 确保显示缩放按钮
-      showCompass: true // 显示指南针
+      showZoom: true,
+      showCompass: true
     })
   )
 
@@ -148,7 +151,7 @@ onMounted(() => {
     accessToken: mapboxgl.accessToken,
     mapboxgl: mapboxgl,
     placeholder: 'Search for places...',
-    marker: false // 不在搜索结果添加标记
+    marker: false
   })
   document.getElementById('geocoder').appendChild(geocoder.onAdd(map.value))
 
@@ -165,6 +168,7 @@ onMounted(() => {
     const userLocation = [position.coords.longitude, position.coords.latitude]
     directions.setOrigin(userLocation)
   })
+  isInitialized = true
 
   // 限制地图放大缩小操作
   const mapContainer = document.getElementById('map')
