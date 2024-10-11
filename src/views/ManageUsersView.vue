@@ -3,12 +3,7 @@
   <div class="manage-users container">
     <h1>Manage Users</h1>
     <div class="text-end pb-4">
-      <Dropdown
-        v-model="selectedFormat"
-        :options="exportFormats"
-        placeholder="Select format"
-        @change="handleFormatChange"
-      />
+      <Dropdown v-model="selectedFormat" :options="exportFormats" placeholder="Select format" />
 
       <Button icon="pi pi-external-link" label="Export" @click="handleExport" />
     </div>
