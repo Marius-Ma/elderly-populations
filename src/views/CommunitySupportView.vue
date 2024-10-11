@@ -137,7 +137,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { getFirestore, collection, addDoc } from 'firebase/firestore'
+import { getFirestore, collection, addDoc, getDoc, doc } from 'firebase/firestore'
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
 import BookingModal from '@/components/BookingModal.vue'
@@ -154,9 +154,6 @@ const canCall = computed(() => isLoggedIn.value && !isAdminUser.value)
 
 const isBookingModalOpen = ref(false)
 const selectedService = ref('')
-
-// Firebase Firestore
-const db = getFirestore()
 
 const openBookingModal = (serviceName) => {
   if (!canBook.value) {
@@ -180,11 +177,20 @@ const submitBooking = async (bookingDetails) => {
     alert('User not logged in. Please log in first.')
     return
   }
-  const userId = user.uid
-  const userEmail = user.email
-  const userName = user.displayName || 'User'
 
+  const db = getFirestore()
   try {
+    // 获取用户数据
+    const userDocRef = doc(db, 'users', user.uid) // 创建用户文档的引用
+    const userDoc = await getDoc(userDocRef) // 使用 getDoc 获取文档数据
+    if (!userDoc.exists()) {
+      throw new Error('User document does not exist.')
+    }
+    const userData = userDoc.data()
+    console.log('User data retrieved from Firestore:', userData) // 打印用户数据，检查是否包含 username
+    const userName = userData.username || 'Valued User' // 从数据库获取用户名
+
+    // 验证日期
     const validDate = dayjs(bookingDetails.date).isValid()
       ? dayjs(bookingDetails.date).toDate()
       : null
@@ -193,9 +199,11 @@ const submitBooking = async (bookingDetails) => {
       throw new Error('Invalid date value.')
     }
 
+    // 存储预订信息
     await addDoc(collection(db, 'bookings'), {
-      userId: userId,
-      userEmail: auth.currentUser.email,
+      userId: user.uid,
+      userEmail: user.email,
+      userName: userName,
       serviceName: selectedService.value,
       bookingDetails: {
         date: Timestamp.fromDate(validDate),
@@ -211,7 +219,7 @@ const submitBooking = async (bookingDetails) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        email: userEmail,
+        email: user.email,
         name: userName,
         bookingDetails: bookingDetails
       })
