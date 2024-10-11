@@ -17,12 +17,12 @@
         ★
       </span>
     </div>
-    <p v-if="userRating">You rated this service: {{ userRating }}</p>
+    <p v-if="userRating && isLoggedIn && isUser">You rated this service: {{ userRating }}</p>
     <button v-if="isUser && isLoggedIn" class="btn-submit" @click="submitRating">
       Submit Rating
     </button>
     <p v-else-if="isLoggedIn && isAdminUser">Ratings are available only for regular users.</p>
-    <p v-else>Please log in to rate this service.</p>
+    <p v-else-if="!isLoggedIn">Please log in to rate this service.</p>
   </div>
 </template>
 
@@ -54,8 +54,11 @@ const isUser = ref(false)
 const isAdminUser = ref(false)
 let currentUser = null
 
-// 获取当前用户
 onMounted(() => {
+  // 加载活动的总体评分信息，不需要用户身份验证
+  loadActivityRating()
+
+  // 监听用户登录状态
   onAuthStateChanged(auth, (firebaseUser) => {
     if (firebaseUser) {
       currentUser = firebaseUser
@@ -72,7 +75,19 @@ onMounted(() => {
   })
 })
 
-// 加载用户对当前活动的评分
+// 加载活动的总评分信息
+const loadActivityRating = async () => {
+  const activityRef = doc(db, 'activities', props.activityId)
+  const activitySnapshot = await getDoc(activityRef)
+
+  if (activitySnapshot.exists()) {
+    const activityData = activitySnapshot.data()
+    totalRatings.value = activityData.totalRatings || 0
+    totalRatingSum.value = activityData.totalRatingSum || 0
+  }
+}
+
+// 加载用户对当前活动的评分（需要登录后调用）
 const loadUserRating = async () => {
   if (!currentUser) return
 
@@ -81,8 +96,6 @@ const loadUserRating = async () => {
 
   if (activitySnapshot.exists()) {
     const activityData = activitySnapshot.data()
-    totalRatings.value = activityData.totalRatings || 0
-    totalRatingSum.value = activityData.totalRatingSum || 0
 
     // 查找用户之前的评分
     const userRatings = activityData.userRatings || {}
