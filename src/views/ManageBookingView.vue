@@ -38,7 +38,7 @@ import { ref, onMounted } from 'vue'
 import Navigator from '@/components/Navigator.vue'
 import Footer from '@/components/Footer.vue'
 import axios from 'axios'
-import { formatDate } from '@/utils/dateUtils'
+import dayjs from 'dayjs'
 import { jsPDF } from 'jspdf'
 import 'jspdf-autotable'
 const bookings = ref([])
@@ -55,26 +55,35 @@ const exportCSV = () => {
 }
 const exportPDF = () => {
   const doc = new jsPDF()
-  let rows = users.value.map((user) => [user.username, user.email, user.role])
+
+  let rows = bookings.value.map((booking) => [
+    booking.serviceName,
+    booking.bookingDetails.date,
+    booking.bookingDetails.time,
+    booking.userEmail,
+    booking.timestamp
+  ])
+
   doc.autoTable({
-    head: [['Username', 'Email', 'Role']],
+    head: [['Service', 'Date', 'Time', 'User Email', 'Booking Timestamp']],
     body: rows
   })
-  doc.save('users.pdf')
+
+  doc.save('bookings.pdf')
 }
 
 const handleExport = () => {
   console.log('Export function triggered')
-  console.log('Exporting as:', selectedFormat.value)
+  console.log('Exporting as:', selectedFormat.value ? selectedFormat.value.value : null)
 
   if (!selectedFormat.value) {
     alert('Please select an export format.')
     return
   }
 
-  if (selectedFormat.value === 'csv') {
+  if (selectedFormat.value.value === 'csv') {
     exportCSV()
-  } else if (selectedFormat.value === 'pdf') {
+  } else if (selectedFormat.value.value === 'pdf') {
     exportPDF()
   }
 }
@@ -85,8 +94,34 @@ const fetchBookings = async () => {
     console.log('API Response:', response.data)
 
     bookings.value = response.data.map((booking) => {
-      const formattedDate = formatDate(booking.bookingDetails.date)
-      const formattedTimestamp = formatDate(booking.timestamp)
+      // 处理 bookingDetails.date，确保其为 Date 对象
+      let validDate
+      if (booking.bookingDetails.date && booking.bookingDetails.date._seconds) {
+        validDate = new Date(booking.bookingDetails.date._seconds * 1000)
+      } else if (typeof booking.bookingDetails.date === 'string') {
+        validDate = new Date(booking.bookingDetails.date)
+      } else {
+        validDate = booking.bookingDetails.date
+      }
+
+      // 使用 dayjs 格式化日期
+      const formattedDate = dayjs(validDate).isValid()
+        ? dayjs(validDate).format('YYYY-MM-DD')
+        : 'Invalid Date'
+
+      // 处理时间戳
+      let validTimestamp
+      if (booking.timestamp && booking.timestamp._seconds) {
+        validTimestamp = new Date(booking.timestamp._seconds * 1000)
+      } else if (typeof booking.timestamp === 'string') {
+        validTimestamp = new Date(booking.timestamp)
+      } else {
+        validTimestamp = booking.timestamp
+      }
+
+      const formattedTimestamp = dayjs(validTimestamp).isValid()
+        ? dayjs(validTimestamp).format('YYYY-MM-DD HH:mm:ss')
+        : 'Invalid Date'
 
       return {
         ...booking,
