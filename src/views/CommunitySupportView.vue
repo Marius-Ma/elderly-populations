@@ -218,7 +218,7 @@ const submitBooking = async (bookingDetails) => {
     })
 
     if (response.ok) {
-      alert('Booking successful!')
+      alert('Booking successful! You will receive a confirmation email later.')
     } else {
       alert('Failed to send booking.')
     }

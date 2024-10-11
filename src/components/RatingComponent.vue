@@ -75,7 +75,6 @@ onMounted(() => {
   })
 })
 
-// 加载活动的总评分信息
 const loadActivityRating = async () => {
   const activityRef = doc(db, 'activities', props.activityId)
   const activitySnapshot = await getDoc(activityRef)
