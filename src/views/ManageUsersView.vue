@@ -121,25 +121,18 @@ const exportPDF = () => {
   doc.save('users.pdf')
 }
 
-console.log('Selected format:', selectedFormat.value)
-const handleFormatChange = (event) => {
-  // Assuming the structure of the event as shown in your logs
-  selectedFormat.value = event.value.value
-  console.log('New selected format:', selectedFormat.value)
-}
-
 const handleExport = () => {
   console.log('Export function triggered')
-  console.log('Exporting as:', selectedFormat.value) // To check what format is being used at export time
+  console.log('Exporting as:', selectedFormat.value)
 
   if (!selectedFormat.value) {
     alert('Please select an export format.')
     return
   }
 
-  if (selectedFormat.value === 'csv') {
+  if (selectedFormat.value.value === 'csv') {
     exportCSV()
-  } else if (selectedFormat.value === 'pdf') {
+  } else if (selectedFormat.value.value === 'pdf') {
     exportPDF()
   }
 }
