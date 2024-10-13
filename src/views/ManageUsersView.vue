@@ -137,9 +137,19 @@ const handleExport = () => {
   }
 }
 
-// Handle file upload
 const handleFileUpload = (event) => {
-  attachment.value = event.target.files[0]
+  const file = event.target.files[0]
+  if (file) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      attachment.value = {
+        name: file.name,
+        type: file.type,
+        content: reader.result.split(',')[1] // 获取 base64 内容
+      }
+    }
+    reader.readAsDataURL(file) // 读取文件为 base64
+  }
 }
 
 // Send bulk email
@@ -154,13 +164,14 @@ const sendBulkEmail = async () => {
   const payload = {
     recipients: recipientsEmails,
     subject: emailSubject.value,
-    message: emailMessage.value
+    message: emailMessage.value,
+    attachment: attachment.value // 添加附件信息
   }
 
   try {
     const response = await axios.post(
       'https://send-email-worker.my429542819.workers.dev/send-bulk-email',
-      payload, // 直接发送 JSON 对象作为请求体
+      payload,
       {
         headers: { 'Content-Type': 'application/json' }
       }
